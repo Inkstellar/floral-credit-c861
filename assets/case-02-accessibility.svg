@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Placeholder image showing accessibility contrast checking and an audit scorecard">
+  <rect width="1600" height="900" fill="#0F0F12"/>
+
+  <!-- window chrome -->
+  <rect x="0" y="0" width="1600" height="54" fill="#141418"/>
+  <line x1="0" y1="54" x2="1600" y2="54" stroke="#25252B" stroke-width="1"/>
+  <circle cx="30" cy="27" r="6" fill="#34343C"/>
+  <circle cx="52" cy="27" r="6" fill="#34343C"/>
+  <circle cx="74" cy="27" r="6" fill="#34343C"/>
+  <rect x="112" y="16" width="290" height="22" rx="11" fill="#1B1B20"/>
+  <text x="128" y="31" font-family="monospace" font-size="12" fill="#8A8A94">a11y-audit / run 412</text>
+
+  <!-- header -->
+  <text x="72" y="132" font-family="sans-serif" font-size="30" font-weight="600" fill="#F2F2EE" letter-spacing="-0.6">Accessibility scorecard</text>
+  <text x="72" y="162" font-family="monospace" font-size="12" fill="#8A8A94" letter-spacing="0.7">WCAG 2.1 Level AA &#183; automated + manual pass</text>
+
+  <!-- big AA badge -->
+  <circle cx="1372" cy="140" r="72" fill="#D4FF3F" opacity="0.14"/>
+  <circle cx="1372" cy="140" r="56" fill="#D4FF3F"/>
+  <text x="1372" y="152" font-family="sans-serif" font-size="36" font-weight="700" fill="#0A0A0A" text-anchor="middle">AA</text>
+
+  <!-- left: contrast checker -->
+  <rect x="72" y="212" width="716" height="290" rx="14" fill="#141418" stroke="#25252B"/>
+  <text x="102" y="250" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.4">CONTRAST CHECK</text>
+
+  <rect x="102" y="272" width="220" height="90" rx="8" fill="#0F0F12"/>
+  <text x="212" y="328" font-family="sans-serif" font-size="22" font-weight="600" fill="#F2F2EE" text-anchor="middle">Body text</text>
+  <text x="352" y="300" font-family="monospace" font-size="12" fill="#8A8A94" letter-spacing="0.8">#F2F2EE on #08080A</text>
+  <text x="352" y="336" font-family="sans-serif" font-size="34" font-weight="700" fill="#D4FF3F">17.83:1</text>
+  <text x="352" y="358" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.2">PASS &#183; AAA</text>
+
+  <line x1="102" y1="384" x2="758" y2="384" stroke="#25252B"/>
+
+  <rect x="102" y="400" width="220" height="80" rx="8" fill="#0F0F12"/>
+  <text x="212" y="448" font-family="sans-serif" font-size="20" font-weight="500" fill="#8A8A94" text-anchor="middle">Muted text</text>
+  <text x="352" y="424" font-family="monospace" font-size="12" fill="#8A8A94" letter-spacing="0.8">#8A8A94 on #08080A</text>
+  <text x="352" y="456" font-family="sans-serif" font-size="30" font-weight="700" fill="#F2F2EE">5.85:1</text>
+  <text x="352" y="476" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.2">PASS &#183; AA</text>
+
+  <!-- right: focus ring + semantics -->
+  <rect x="812" y="212" width="716" height="290" rx="14" fill="#141418" stroke="#25252B"/>
+  <text x="842" y="250" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.4">FOCUS &amp; SEMANTICS</text>
+
+  <rect x="842" y="280" width="200" height="52" rx="26" fill="none" stroke="#34343C"/>
+  <text x="908" y="312" font-family="monospace" font-size="12" fill="#8A8A94" letter-spacing="0.8">BUTTON</text>
+  <rect x="834" y="272" width="216" height="68" rx="34" fill="none" stroke="#D4FF3F" stroke-width="2"/>
+  <text x="842" y="372" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.2">VISIBLE FOCUS RING &#183; 2PX</text>
+
+  <line x1="1112" y1="272" x2="1112" y2="470" stroke="#25252B"/>
+
+  <text x="1146" y="300" font-family="monospace" font-size="12" fill="#8A8A94" letter-spacing="0.8">ROLE + NAME ON EVERY CONTROL</text>
+  <text x="1146" y="334" font-family="monospace" font-size="12" fill="#8A8A94" letter-spacing="0.8">HEADING ORDER, NO SKIPS</text>
+  <text x="1146" y="368" font-family="monospace" font-size="12" fill="#8A8A94" letter-spacing="0.8">LIVE REGIONS ANNOUNCED</text>
+  <text x="1146" y="402" font-family="monospace" font-size="12" fill="#8A8A94" letter-spacing="0.8">FULL KEYBOARD PATH</text>
+  <text x="1146" y="436" font-family="monospace" font-size="12" fill="#8A8A94" letter-spacing="0.8">REDUCED-MOTION HONOURED</text>
+  <circle cx="1124" cy="295" r="4" fill="#D4FF3F"/>
+  <circle cx="1124" cy="329" r="4" fill="#D4FF3F"/>
+  <circle cx="1124" cy="363" r="4" fill="#D4FF3F"/>
+  <circle cx="1124" cy="397" r="4" fill="#D4FF3F"/>
+  <circle cx="1124" cy="431" r="4" fill="#D4FF3F"/>
+
+  <!-- before / after -->
+  <rect x="72" y="534" width="1456" height="256" rx="14" fill="#141418" stroke="#25252B"/>
+  <text x="102" y="572" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.4">ISSUES BY SEVERITY &#183; BEFORE VS AFTER</text>
+
+  <!-- critical -->
+  <text x="102" y="620" font-family="monospace" font-size="11.5" fill="#8A8A94" letter-spacing="1">CRITICAL</text>
+  <rect x="230" y="604" width="900" height="22" rx="4" fill="#25252B"/>
+  <rect x="230" y="604" width="900" height="22" rx="4" fill="#D4FF3F" opacity="0.22"/>
+  <text x="1150" y="621" font-family="monospace" font-size="12" fill="#8A8A94">214 &#8594;</text>
+  <text x="1216" y="621" font-family="sans-serif" font-size="16" font-weight="700" fill="#D4FF3F">31</text>
+
+  <!-- serious -->
+  <text x="102" y="668" font-family="monospace" font-size="11.5" fill="#8A8A94" letter-spacing="1">SERIOUS</text>
+  <rect x="230" y="652" width="620" height="22" rx="4" fill="#25252B"/>
+  <rect x="230" y="652" width="620" height="22" rx="4" fill="#D4FF3F" opacity="0.16"/>
+  <text x="1150" y="669" font-family="monospace" font-size="12" fill="#8A8A94">148 &#8594;</text>
+  <text x="1216" y="669" font-family="sans-serif" font-size="16" font-weight="700" fill="#D4FF3F">44</text>
+
+  <!-- moderate -->
+  <text x="102" y="716" font-family="monospace" font-size="11.5" fill="#8A8A94" letter-spacing="1">MODERATE</text>
+  <rect x="230" y="700" width="380" height="22" rx="4" fill="#25252B"/>
+  <rect x="230" y="700" width="380" height="22" rx="4" fill="#D4FF3F" opacity="0.11"/>
+  <text x="1150" y="717" font-family="monospace" font-size="12" fill="#8A8A94">96 &#8594;</text>
+  <text x="1216" y="717" font-family="sans-serif" font-size="16" font-weight="700" fill="#D4FF3F">12</text>
+
+  <line x1="102" y1="742" x2="1498" y2="742" stroke="#25252B"/>
+  <text x="102" y="770" font-family="monospace" font-size="11" fill="#5E5E68" letter-spacing="1.2">FIXED IN THE COMPONENT LIBRARY &#8594; EVERY CONSUMING TEAM INHERITS THE FIX</text>
+
+  <!-- sample stamp -->
+  <rect x="1218" y="858" width="302" height="30" rx="6" fill="#0F0F12" stroke="#D4FF3F" stroke-dasharray="5 4"/>
+  <text x="1236" y="878" font-family="monospace" font-size="11" fill="#D4FF3F" letter-spacing="1.4">SAMPLE IMAGE &#8212; REPLACE ME</text>
+</svg>

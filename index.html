@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en" data-page-node-id="VDBBZ73EJv4SGHFp0mqHbA">
+<head data-page-node-id="205j0Ls8H0ziARNyN1FF8c">
+<meta charset="utf-8" data-page-node-id="7Ps9Nt7vD98co4qiyFOEYB">
+<meta name="viewport" content="width=device-width, initial-scale=1" data-page-node-id="K7WDqNrcMw8ShCaWoq8xtK">
+<title>Kousigan Moni — Senior UX Engineer, Design Systems</title>
+<meta name="description" content="Kousigan Moni is a Senior UX Engineer specialising in design systems, React component libraries, design tokens, accessibility and developer experience for enterprise SaaS in financial services." data-page-node-id="NS2GOfpg7ohcAM9GNCvKyM">
+<meta name="color-scheme" content="dark" data-page-node-id="cYdkBo4KEF61Tl9kotCYEu">
+<meta name="theme-color" content="#08080A">
+<link rel="canonical" href="https://portfolio.inkstellar.com/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2308080A'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='17' font-weight='700' fill='%23D4FF3F' text-anchor='middle'%3EK%3C/text%3E%3C/svg%3E">
+
+<!-- social / link preview -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kousigan Moni">
+<meta property="og:url" content="https://portfolio.inkstellar.com/">
+<meta property="og:title" content="Kousigan Moni — Senior UX Engineer, Design Systems">
+<meta property="og:description" content="Design systems, React component libraries and developer handover for enterprise SaaS in financial services. 12+ years across product, design and engineering.">
+<meta property="og:image" content="https://portfolio.inkstellar.com/assets/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Kousigan Moni — Senior UX Engineer, Design Systems">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kousigan Moni — Senior UX Engineer, Design Systems">
+<meta name="twitter:description" content="Design systems, React component libraries and developer handover for enterprise SaaS in financial services. 12+ years across product, design and engineering.">
+<meta name="twitter:image" content="https://portfolio.inkstellar.com/assets/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="akE2itndQjomSXn5DSt1cE">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin data-page-node-id="Y4tcNx5q9MxxbGoE5GGjPd">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" data-page-node-id="8kdBz8fXAnrUuuaHEfXrTO">
+<style>
+  :root{
+    --bg:#08080A;
+    --bg-2:#0F0F12;
+    --surface:#141418;
+    --line:#25252B;
+    --line-2:#34343C;
+    --fg:#F2F2EE;
+    --fg-2:#A8A8B0;
+    --fg-3:#8A8A94; /* 5.85:1 on --bg — was #6E6E78 at 3.97:1, which failed WCAG AA */
+    --accent:#D4FF3F;
+    --accent-dim:rgba(212,255,63,.14);
+    --radius:14px;
+    --pad:clamp(20px,4.4vw,72px);
+    --maxw:1440px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+    --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --display:'Inter Tight','Inter',system-ui,sans-serif;
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--fg);
+    font-family:var(--sans);font-size:16px;line-height:1.6;
+    font-weight:400;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  img,svg{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+  /* ---------- accessibility ---------- */
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+  .skip{
+    position:absolute;left:var(--pad);top:-100px;z-index:200;
+    background:var(--accent);color:#0A0A0A;font-weight:600;font-size:14px;
+    padding:12px 18px;border-radius:8px;transition:top .18s var(--ease);
+  }
+  .skip:focus{top:16px}
+  .vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+  /* ---------- shell ---------- */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--pad)}
+  .rule{height:1px;background:var(--line);border:0;margin:0}
+
+  /* ---------- progress ---------- */
+  .progress{position:fixed;inset:0 0 auto 0;height:2px;background:transparent;z-index:120}
+  .progress i{display:block;height:100%;width:0;background:var(--accent);transition:width .1s linear}
+
+  /* ---------- nav ---------- */
+  header.nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    background:color-mix(in srgb,var(--bg) 78%,transparent);
+    border-bottom:1px solid transparent;transition:border-color .3s var(--ease);
+  }
+  header.nav.stuck{border-bottom-color:var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;gap:24px;height:64px}
+  .mark{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+  .mark b{color:var(--accent);font-weight:500}
+  .nav-links{display:flex;gap:26px;align-items:center}
+  .nav-links a{
+    font-family:var(--mono);font-size:12px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--fg-2);transition:color .2s var(--ease);
+  }
+  .nav-links a:hover{color:var(--fg)}
+  .status{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--fg-2);border:1px solid var(--line);border-radius:999px;padding:7px 13px;
+  }
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);position:relative}
+  .dot::after{
+    content:"";position:absolute;inset:-4px;border-radius:50%;
+    border:1px solid var(--accent);opacity:.5;animation:ping 2.4s var(--ease) infinite;
+  }
+  @keyframes ping{0%{transform:scale(.6);opacity:.7}70%,100%{transform:scale(1.5);opacity:0}}
+  @media (max-width:880px){.nav-links{display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{padding-top:clamp(120px,17vh,190px);padding-bottom:clamp(40px,6vw,70px);position:relative}
+  .eyebrow{
+    font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 clamp(20px,3vw,34px);display:flex;align-items:center;gap:12px;
+  }
+  .eyebrow::before{content:"";width:34px;height:1px;background:var(--accent);opacity:.6}
+  h1.name{
+    font-family:var(--display);font-weight:600;margin:0;
+    font-size:clamp(52px,12.2vw,178px);line-height:.86;letter-spacing:-.045em;
+    text-wrap:balance;
+  }
+  h1.name span{display:block;color:var(--fg-3)}
+  .hero-grid{
+    display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);
+    gap:clamp(28px,5vw,80px);align-items:end;margin-top:clamp(30px,4.4vw,56px);
+  }
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;align-items:start}}
+  .lede{
+    font-size:clamp(17px,1.55vw,21px);line-height:1.52;color:var(--fg-2);
+    max-width:60ch;margin:0;text-wrap:pretty;
+  }
+  .lede strong{color:var(--fg);font-weight:500}
+  .meta-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+  .meta-list li{
+    display:flex;justify-content:space-between;gap:18px;
+    font-family:var(--mono);font-size:12px;letter-spacing:.05em;
+    padding-bottom:12px;border-bottom:1px solid var(--line);color:var(--fg-3);
+  }
+  .meta-list li:last-child{border-bottom:0;padding-bottom:0}
+  .meta-list b{color:var(--fg);font-weight:400}
+
+  /* ---------- marquee ---------- */
+  .marquee{
+    border-block:1px solid var(--line);margin-top:clamp(46px,7vw,86px);
+    padding:18px 0;overflow:hidden;position:relative;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+  }
+  .track{display:flex;width:max-content;animation:slide 46s linear infinite}
+  .marquee:hover .track,.marquee:focus-within .track{animation-play-state:paused}
+  @keyframes slide{to{transform:translateX(-50%)}}
+  .track ul{display:flex;list-style:none;margin:0;padding:0}
+  .track li{
+    display:flex;align-items:center;gap:22px;padding-inline:22px;
+    font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--fg-2);white-space:nowrap;
+  }
+  .track li::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);flex:none;opacity:.75}
+
+  /* ---------- section chrome ---------- */
+  section{padding-block:clamp(66px,9vw,132px)}
+  .sec-head{
+    display:flex;justify-content:space-between;align-items:baseline;gap:24px;
+    padding-bottom:22px;border-bottom:1px solid var(--line);margin-bottom:clamp(34px,5vw,62px);
+    flex-wrap:wrap;
+  }
+  .sec-label{
+    font-family:var(--mono);font-size:12px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--fg-3);margin:0;display:flex;gap:14px;align-items:center;
+  }
+  .sec-label b{color:var(--accent);font-weight:400}
+  h2.sec-title{
+    font-family:var(--display);font-weight:500;letter-spacing:-.035em;
+    font-size:clamp(28px,4.6vw,60px);line-height:1.02;margin:0;max-width:22ch;text-wrap:balance;
+  }
+  .sec-note{font-family:var(--mono);font-size:12px;color:var(--fg-3);letter-spacing:.04em;margin:0}
+
+  /* ---------- expertise ---------- */
+  .grid-exp{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:0;
+    border-top:1px solid var(--line)}
+  .exp{
+    padding:clamp(26px,3.2vw,42px) clamp(20px,2.6vw,38px) clamp(30px,3.4vw,44px) 0;
+    border-bottom:1px solid var(--line);border-right:1px solid var(--line);
+    position:relative;transition:background .35s var(--ease);
+  }
+  .exp:hover{background:var(--bg-2)}
+  .exp .num{
+    font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.1em;display:block;margin-bottom:20px;
+  }
+  .exp .kick{
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--fg-3);display:block;margin-bottom:10px;
+  }
+  .exp h3{
+    font-family:var(--display);font-weight:500;font-size:clamp(21px,2.2vw,27px);
+    letter-spacing:-.025em;margin:0 0 12px;line-height:1.14;
+  }
+  .exp p{margin:0 0 18px;color:var(--fg-2);font-size:14.5px;line-height:1.62;max-width:46ch}
+  .tags{list-style:none;display:flex;flex-wrap:wrap;gap:7px;margin:0;padding:0}
+  .tags li{
+    font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--fg-2);
+    border:1px solid var(--line);border-radius:999px;padding:5px 11px;transition:.25s var(--ease);
+  }
+  .exp:hover .tags li{border-color:var(--line-2)}
+
+  /* ---------- work ---------- */
+  .work-grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:0;display:flex;flex-direction:column;overflow:hidden;
+    transition:border-color .35s var(--ease),transform .35s var(--ease);
+  }
+  .card:hover{border-color:var(--line-2);transform:translateY(-3px)}
+  .card-body{padding:clamp(22px,2.4vw,30px);display:flex;flex-direction:column;gap:15px;flex:1}
+  .card .kicker{
+    font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);
+  }
+  .card h3{font-family:var(--display);font-weight:500;font-size:clamp(20px,2vw,24px);letter-spacing:-.02em;margin:0;line-height:1.18}
+  .card p{margin:0;color:var(--fg-2);font-size:14.5px;line-height:1.62}
+  .card dl{margin:6px 0 0;display:grid;gap:14px}
+  .card dt{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--fg-3);margin-bottom:5px;
+  }
+  .card dd{margin:0;font-size:14px;color:var(--fg-2);line-height:1.55}
+  /* case-study image */
+  .shot{margin:0;background:var(--bg-2);border-bottom:1px solid var(--line)}
+  .shot img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block}
+  .shot figcaption{
+    display:flex;justify-content:space-between;align-items:center;gap:14px;
+    padding:11px 16px;border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-3);
+  }
+  .badge{
+    flex:none;background:var(--accent);color:#0A0A0A;font-weight:500;font-size:9.5px;
+    letter-spacing:.12em;border-radius:4px;padding:3px 8px;
+  }
+
+  /* outcome metrics */
+  .metrics{
+    list-style:none;margin:2px 0 0;padding:0;display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  }
+  .metrics li{background:var(--surface);padding:14px 13px}
+  .metrics b{
+    display:block;font-family:var(--display);font-weight:600;color:var(--fg);
+    font-size:clamp(20px,2.1vw,26px);letter-spacing:-.03em;line-height:1.05;
+  }
+  .metrics span{
+    display:block;margin-top:7px;font-family:var(--mono);font-size:9.5px;
+    letter-spacing:.09em;text-transform:uppercase;color:var(--fg-3);line-height:1.45;
+  }
+  .foot-note{
+    margin:0;padding-top:2px;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.04em;line-height:1.6;color:var(--fg-3);
+  }
+  .foot-note b{color:var(--accent);font-weight:400}
+
+  /* draft / sample notice */
+  .sample-note{
+    display:flex;gap:14px;align-items:flex-start;margin:0;
+    border:1px dashed var(--line-2);border-radius:10px;padding:16px 18px;background:var(--accent-dim);
+  }
+  .sample-note p{
+    margin:0;font-family:var(--mono);font-size:11.5px;line-height:1.7;
+    letter-spacing:.03em;color:var(--fg-2);
+  }
+  .sample-note b{color:var(--accent);font-weight:400}
+
+  /* ---------- timeline ---------- */
+  .tl{border-top:1px solid var(--line)}
+  .tl-group{border-bottom:1px solid var(--line);padding:clamp(26px,3vw,40px) 0}
+  .tl-head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+  .tl-head h3{font-family:var(--display);font-weight:500;font-size:clamp(20px,2.1vw,26px);letter-spacing:-.02em;margin:0}
+  .tl-head .span{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.07em}
+  .tl-rows{display:grid;gap:2px}
+  .row{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:baseline;
+    padding:13px 0;border-top:1px solid var(--line);
+  }
+  .row:first-child{border-top:0}
+  .row .role{font-size:15.5px;color:var(--fg)}
+  .row .role small{display:block;color:var(--fg-3);font-size:13px;margin-top:3px}
+  .row .when{font-family:var(--mono);font-size:12px;color:var(--fg-3);letter-spacing:.04em;white-space:nowrap}
+  .row.lead .role{font-weight:500}
+  .row.lead .role small{color:var(--accent);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+
+  /* ---------- toolbox ---------- */
+  .tools{display:grid;gap:34px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+  .tool-col h3{
+    font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--fg-3);margin:0 0 16px;padding-bottom:12px;border-bottom:1px solid var(--line);
+  }
+  .tool-col ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+  .tool-col li{font-size:14.5px;color:var(--fg-2);display:flex;gap:10px;align-items:baseline}
+  .tool-col li::before{content:"—";color:var(--accent);font-family:var(--mono);font-size:11px}
+
+  /* ---------- contact ---------- */
+  .contact{background:var(--bg-2);border-top:1px solid var(--line)}
+  .contact h2{
+    font-family:var(--display);font-weight:500;letter-spacing:-.04em;
+    font-size:clamp(32px,7.4vw,104px);line-height:.98;margin:0 0 clamp(30px,4vw,50px);text-wrap:balance;
+  }
+  .cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--mono);font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;
+    padding:15px 24px;border-radius:999px;border:1px solid var(--line-2);
+    transition:.28s var(--ease);color:var(--fg);
+  }
+  .btn:hover{border-color:var(--fg-2);background:var(--surface)}
+  .btn.primary{background:var(--accent);color:#0A0A0A;border-color:var(--accent);font-weight:500}
+  .btn.primary:hover{background:#E2FF6B;border-color:#E2FF6B}
+  .btn svg{width:14px;height:14px;flex:none}
+
+  footer{padding-block:34px;border-top:1px solid var(--line);background:var(--bg-2)}
+  .foot{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;color:var(--fg-3)}
+  .foot a:hover{color:var(--accent)}
+
+  /* ---------- reveal ---------- */
+  .rv{opacity:0;transform:translateY(20px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
+  .rv.in{opacity:1;transform:none}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .rv{opacity:1;transform:none;transition:none}
+    .track{animation:none}
+    .dot::after{animation:none}
+    *{transition-duration:.01ms !important}
+  }
+  @media (max-width:620px){
+    .exp{border-right:0}
+    .row{grid-template-columns:1fr}
+    .row .when{grid-row:1}
+  }
+</style>
+</head>
+<body data-page-node-id="DblrFvxGD2rZCInSWpog3G">
+
+<a class="skip" href="#main" data-page-node-id="VOVDkc9V7NlW4o6C4DpuF3">Skip to content</a>
+<div class="progress" aria-hidden="true" data-page-node-id="FmUH6kcLTIpOfadn7AcUlf"><i id="bar" data-page-node-id="ui9Dccik8kb4K49cJrLh5j"></i></div>
+
+<header class="nav" id="nav" data-page-node-id="29gnrq51EaaNDOgBfpBUZQ">
+  <div class="wrap nav-in" data-page-node-id="YVHfbiOR2Nk4rKjtAOFAvW">
+    <a class="mark" href="#top" aria-label="Kousigan Moni — home" data-page-node-id="Cq7UUZ8PwYn7XMEsKG40qZ">Kousigan<b data-page-node-id="UlvC0L9Xbizl3EqczVk7Ke">.</b>Moni</a>
+    <nav class="nav-links" aria-label="Sections" data-page-node-id="qnF1CucXfDTms36ktbHlZ1">
+      <a href="#expertise" data-page-node-id="bmNt8DLTPDJ5IZaEDprQ6P">Expertise</a>
+      <a href="#work" data-page-node-id="d91FtWBmEGa6LiKh3eLFRZ">Work</a>
+      <a href="#experience" data-page-node-id="Qo9ugKcvqfnR9PUvhXL1ny">Experience</a>
+      <a href="#toolbox" data-page-node-id="3oXFRNkmwyQcNTYDm5gc24">Toolbox</a>
+      <a href="#contact" data-page-node-id="9uczVULQAf6rT5npx9WuWE">Contact</a>
+    </nav>
+    <span class="status" data-page-node-id="R4FT0BDtwio1xyiCNEAuhE"><span class="dot" aria-hidden="true" data-page-node-id="kvyBnMYVwV3w2sJHi5Bq8O"></span>Open to senior roles</span>
+  </div>
+</header>
+
+<main id="main" data-page-node-id="XsnzVTzknaHl7BKtkpf8OX">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="top" data-page-node-id="1wPBVstBboasBuD1dEBW42">
+    <div class="wrap" data-page-node-id="KlW01BUy5Ds8IMBtIn5vv0">
+      <p class="eyebrow rv" data-page-node-id="G6jcDjTSCndfFo9QQbjBeF">Senior UX Engineer — Design Systems &amp; Developer Experience</p>
+      <h1 class="name rv" data-page-node-id="8uLzpC8chDBDd9L3AINwAf">Kousigan<span data-page-node-id="HYZ5rSnclfF6GinmiwtFYH">Moni</span></h1>
+
+      <div class="hero-grid" data-page-node-id="DAzX4EwpeA7NCnLkv1HDFh">
+        <p class="lede rv" data-page-node-id="3x7A3Dvl2iXMQVxIWx6Pco">
+          I architect the <strong data-page-node-id="o8iNCJ4L7ucGYDxTEfetkI">agentic UX systems, design infrastructure and AI-native toolsets</strong>
+          that enable autonomous agents to interface with complex UIs — transforming static design patterns into executable, agent-readable libraries.
+          More than a decade across financial services and enterprise SaaS, working as the connective tissue
+          between product, design and engineering.
+        </p>
+        <ul class="meta-list rv" data-page-node-id="IOesEfunTJC09p1LKl1YHd">
+          <li data-page-node-id="LGHIrtqsOFJMFOj4xHUMLC"><span data-page-node-id="gxmPGeZBxhNtsFE9czHDuC">Based in</span><b data-page-node-id="qhNBobk4cnJ86MapOZ3Qib">Chennai, India</b></li>
+          <li data-page-node-id="CROk0IJChCOT44qkftv2Cx"><span data-page-node-id="e2Zz1tS60PQWlONej9DM9Q">Local time</span><b id="clock" data-page-node-id="1QG4AuT0RBcl6fNfMVfgUm">—</b></li>
+          <li data-page-node-id="OD0TlV9R1cJZ5KZRXc84wJ"><span data-page-node-id="TyuFY1DTn8CwE3QxkMAGrE">Focus</span><b data-page-node-id="NfaNKOqaXgzttQW2vBBGp7">Agentic UX · AI Orchestration · Design Systems</b></li>
+          <li data-page-node-id="ULldizWFWFWGDoBL3Cns33"><span data-page-node-id="xtfHGJbTk0S8Y9HWAvnSpZ">Currently</span><b data-page-node-id="17mAQRDketE0F3DTHSM5hh">Senior UX Engineer, FE fundinfo</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="marquee" aria-label="Areas of practice" data-page-node-id="I48gBRzDctZP4kfkZWF4Uh">
+      <div class="track" data-page-node-id="dzSpvsChVrtvmguzmNWBzi">
+        <ul data-page-node-id="v6OXYVgHMdJZ4VWCmr8Mhi">
+          <li data-page-node-id="cU5C0T3LUdcmaqLI8P9vgC">12+ years in product design &amp; UX engineering</li>
+          <li data-page-node-id="kO6ktBzthoHfGHPaqKvFaz">Enterprise design system strategy &amp; governance</li>
+          <li data-page-node-id="Eod2ORP8jMMDtC4346T2Jb">React component libraries at scale</li>
+          <li data-page-node-id="x0PfITDduBJKHagDvDMfuz">Design tokens &amp; UI standards</li>
+          <li data-page-node-id="TZ6cb31MbyKkEDdcN3QQrF">Accessibility (WCAG) embedded in the system</li>
+          <li data-page-node-id="J0bnoKbQrT2okl02tc0Byf">Developer handover &amp; DX platforms</li>
+          <li data-page-node-id="q31jvlhrtlWZAZsso4tfYC">AI-assisted design systems</li>
+          <li data-page-node-id="euK0gSpBWsDAqJbsprhyWl">Agentic UI platforms</li>
+          <li data-page-node-id="SJlLjUYw04H0WdCkB5jKLD">Automated UX workflows</li>
+          <li data-page-node-id="GEmhTx16JYxHqlv0v1EFFt">Mentoring UX engineers &amp; designers</li>
+        </ul>
+        <ul aria-hidden="true" data-page-node-id="YZKy8HS2tSes13o5zQMkey">
+          <li data-page-node-id="OsgAuwUWS5PGDONiBx5H9D">12+ years in product design &amp; UX engineering</li>
+          <li data-page-node-id="NcD5ACXQYySGPkHsXdTwdy">Enterprise design system strategy &amp; governance</li>
+          <li data-page-node-id="hWsrGqFWoCcOpjTbOdER5E">React component libraries at scale</li>
+          <li data-page-node-id="5CYkAOAI2zOZQa861t8dTv">Design tokens &amp; UI standards</li>
+          <li data-page-node-id="J9AgH5w9aRcUQfxlKqe8SH">Accessibility (WCAG) embedded in the system</li>
+          <li data-page-node-id="QAXcJD7UQvtvUKGirl52jt">Developer handover &amp; DX platforms</li>
+          <li data-page-node-id="kRWxyKyQ71htMjZNR9l6XN">AI-assisted design systems</li>
+          <li data-page-node-id="l4dVz1UdyTS1qdNnKpQZNe">Agentic UI platforms</li>
+          <li data-page-node-id="kHPrXFzGHJer8QEt4wTygi">Automated UX workflows</li>
+          <li data-page-node-id="CxgGNnJmK7jpObbtGFG176">Mentoring UX engineers &amp; designers</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  
+  <!-- ================= FEATURED PROJECT ================= -->
+  <section id="featured" data-page-node-id="featured-proj-sec">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <p class="sec-label"><b>/00</b> Featured Project</p>
+        <p class="sec-note">Current obsession</p>
+      </div>
+      <h2 class="sec-title rv">AI that lives at your cursor.</h2>
+      
+      <div class="work-grid" style="margin-top:clamp(34px,4.4vw,56px)">
+        <article class="card rv" style="grid-column: 1 / -1; display: grid; grid-template-columns: 1.2fr 1fr; gap: 0;">
+          <figure class="shot" style="border-bottom: 0; border-right: 1px solid var(--line);">
+            <img src="assets/featured-project.png" alt="High-fidelity landing page showcase for InkBuddy, featuring the cursor-based HUD and neon-dark aesthetic.">
+            <figcaption style="border-top: 1px solid var(--line);">
+              <span>Native macOS Assistant</span>
+              <span class="badge">Live</span>
+            </figcaption>
+          </figure>
+          <div class="card-body" style="padding: clamp(30px, 3vw, 50px);">
+            <span class="kicker">InkBuddy · AI UX Engineering</span>
+            <h3 style="font-size: clamp(24px, 2.5vw, 32px);">Redefining the AI interaction loop.</h3>
+            <p style="font-size: 16px; margin-bottom: 20px;">
+              InkBuddy is a native macOS companion that eliminates "focus stealing." By utilizing a push-to-talk trigger (⌃⌥) and active window capture, it delivers AI responses token-by-token in a non-activating HUD panel directly at the user's cursor.
+            </p>
+            
+            <ul class="metrics" style="margin-bottom: 24px;">
+              <li><b>140ms</b><span>Latency</span></li>
+              <li><b>Active</b><span>Window Capture</span></li>
+              <li><b>1024</b><span>maxTokens</span></li>
+            </ul>
+            
+            <dl style="margin-bottom: 30px;">
+              <div>
+                <dt>The Breakthrough</dt>
+                <dd>Moving AI from a separate chat window into the spatial context of the OS, allowing for zero-friction context sharing and instant retrieval.</dd>
+              </div>
+            </dl>
+            
+            <a href="https://inkbuddy.inkstellar.in/" class="btn primary" style="width: fit-content; padding: 12px 24px; font-size: 12px;" target="_blank" rel="noopener">
+              Explore InkBuddy →
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+<!-- ================= EXPERTISE ================= -->
+  <section id="expertise" data-page-node-id="sWNj0Ea0APtZ1Vz9RRxHTB">
+    <div class="wrap" data-page-node-id="oXLSJo98siZAUUmgbBj0W0">
+      <div class="sec-head rv" data-page-node-id="mQ7nNMqPETDEXn0KbLpZOD">
+        <p class="sec-label" data-page-node-id="wssd59WJd5LGg3P4cE7Ogc"><b data-page-node-id="rUlWbf9QvonKraijyYy8xs">/01</b> Expertise</p>
+        <p class="sec-note" data-page-node-id="4H56vGj3OqNU5DjjpHJrkC">What I do, and how I do it</p>
+      </div>
+      <h2 class="sec-title rv" data-page-node-id="uHdbfHPwo6IF1fcbYZm57S">Systems, not screens.</h2>
+
+      <div class="grid-exp" style="margin-top:clamp(34px,4.4vw,56px)" data-page-node-id="E007jBLOfnNqzi7eAWiagf">
+        <article class="exp rv" data-page-node-id="F95BL1Y6ELU1BMdBQ8qJUe">
+          <span class="num" data-page-node-id="h8vxXOcU1kr9DPDGc4wnNp">01</span>
+          <span class="kick" data-page-node-id="mUto8ryJunVbHNShJ58Zfh">Systems over one-offs</span>
+          <h3 data-page-node-id="AaGkswOWThQxGOs5StIVP0">Design Systems</h3>
+          <p data-page-node-id="aCmzWxdo96ncJbKhXbwNAj">Strategy and governance end to end — component architecture, design tokens, documentation and adoption. I build platforms teams reuse, not artefacts they file away.</p>
+          <ul class="tags" data-page-node-id="ZWjzHXAryA8tX1KOamee7a"><li data-page-node-id="CSSVkPf3EVeSBh6gl4NGCP">Governance</li><li data-page-node-id="eNwvR4Axy6Mk6O9BbprZlT">Component architecture</li><li data-page-node-id="vGXLsI3gjqAw2LPd2EtYxX">Design tokens</li><li data-page-node-id="9Vv3H12MAeIGL1HOD28E6g">Documentation</li><li data-page-node-id="1c0dqXx8L0VFovjm7wa1V5">Adoption</li></ul>
+        </article>
+
+        <article class="exp rv" data-page-node-id="AAAi3BHukFBbYFlnVk7hqL">
+          <span class="num" data-page-node-id="N3eYryy2qbc3V6kv26vgP0">02</span>
+          <span class="kick" data-page-node-id="GIOgm1g5Q5kFG96GTCHt1V">Speaks the language of code</span>
+          <h3 data-page-node-id="QYLuMGtAZsLhHRndc042x8">Design Engineering</h3>
+          <p data-page-node-id="UI10EtPPyDyRA9gSswr9qa">I sit on both sides of the handover. Reusable React component libraries, UI standards, and specs engineers can build from without a follow-up call.</p>
+          <ul class="tags" data-page-node-id="9Ko1FIp2hyhZOmsxp9GQVW"><li data-page-node-id="S1nR3LzWzxoVBG0FuvLL7j">React</li><li data-page-node-id="rRJvFBPrXK8iJApNT0hbCv">Component libraries</li><li data-page-node-id="PhJkZN8Kv0lnxx3ANpSywy">HTML/CSS</li><li data-page-node-id="q170UdNstP28tBRIcxxU9g">PWAs</li><li data-page-node-id="vJVUKVqT1yDrBzBenUonFm">Dev handover</li></ul>
+        </article>
+
+        <article class="exp rv" data-page-node-id="56EPqXB8kBMhts9QTWp9gc">
+          <span class="num" data-page-node-id="kKZLY1ANEhZusE9fTFnp96">03</span>
+          <span class="kick" data-page-node-id="pTLuN6tmrfeI3hM3231yf2">Built in, not bolted on</span>
+          <h3 data-page-node-id="G96ErWmazzo9W1YTeOTUBN">Accessibility</h3>
+          <p data-page-node-id="Bi4HL6bqLOuf6mlht7PGT7">Compliance stops being a project when it lives inside the component library. I embed WCAG frameworks into the system so every team inherits it by default.</p>
+          <ul class="tags" data-page-node-id="2Mg9w1qUkTbkk3LPTxFS6y"><li data-page-node-id="nk0IOLH1O88Cwpnsq99c22">WCAG</li><li data-page-node-id="J8qJeCgi6gwgW95m1FZeT9">Inclusive patterns</li><li data-page-node-id="RDTA1uXrQDQtAJ89m9tLqa">Audit &amp; remediation</li></ul>
+        </article>
+
+        <article class="exp rv" data-page-node-id="Y7g7it7cG4Y4S1IiCSdFut">
+          <span class="num" data-page-node-id="w2hnqebFOYLC7HU0MnxsQi">04</span>
+          <span class="kick" data-page-node-id="vGuf6ntoCG0e2OpAXYLtpZ">Bridging design and code</span>
+          <h3 data-page-node-id="0pt2axmg3GWBPmHFAv2ceR">Developer Experience</h3>
+          <p data-page-node-id="48uuLsjFqCinruF7PRVlUm">Shared standards, tooling and a common language between design and engineering — so quality goes up while delivery time goes down.</p>
+          <ul class="tags" data-page-node-id="m47kP0tekaJHTo8BqbYGhC"><li data-page-node-id="BvBOmd30IGpmbYAczffDxi">DX platforms</li><li data-page-node-id="mCdBMskUlaRIUDxl7EabfO">Tooling</li><li data-page-node-id="5DqfzqvtcQwglQ84nYNHB4">Shared standards</li></ul>
+        </article>
+
+        <article class="exp rv" data-page-node-id="6B0SOGfOYmaHc1qEaa3H8H">
+          <span class="num" data-page-node-id="7Dzz62XMRxcisBGDUVjyV0">05</span>
+          <span class="kick" data-page-node-id="HVv6DUi3YqGzQiSqQHKBok">AI-native workflows</span>
+          <h3 data-page-node-id="L20sIfEj0ZA2W4JFaDGUCb">AI in the SDLC</h3>
+          <p data-page-node-id="eRFFAkHN1rYLb1FqMUh6CO">Integrating AI into how products get designed and built: AI-assisted design systems, agentic UI platforms and automated UX workflows that remove manual effort.</p>
+          <ul class="tags" data-page-node-id="jbY7zClzMiGDD9V4jZXFyi"><li data-page-node-id="DqwY6Bgzh67O0nDwIUBW2L">AI-assisted systems</li><li data-page-node-id="kRWAhVqdhTvmSIhPl69NWq">Agentic UI</li><li data-page-node-id="dnaCI4YLSwbu42ZzajsSIL">Automation</li></ul>
+        </article>
+
+        <article class="exp rv" data-page-node-id="CXwfoUHAjRzyaWFLwO4fjq">
+          <span class="num" data-page-node-id="MpLl3ArWbvBPogEUKX88YB">06</span>
+          <span class="kick" data-page-node-id="icIouJWd2yQ19bE9JDDXU5">Force multiplier</span>
+          <h3 data-page-node-id="8yQTUm8xBraN8d82CBVb50">Leadership</h3>
+          <p data-page-node-id="SUEhRUWZ96EaqLNbnzRGhM">Mentoring UX engineers and designers, running critiques, and consulting across Agile teams. I make the people around me faster, not just the codebase.</p>
+          <ul class="tags" data-page-node-id="zp3aK0rw1ZGDiM9Bqlx36O"><li data-page-node-id="DpQSPVaAqKsi8tihSjnOgt">Mentoring</li><li data-page-node-id="Jlymw8UfcKt5EVLdDcA3LO">Critique</li><li data-page-node-id="AdnY9CIODWyswPkj8V6aay">Agile consultation</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WORK ================= -->
+  <section id="work" data-page-node-id="pYFs0eAkwOtBaZSaRIOylX">
+    <div class="wrap" data-page-node-id="vadSYs6LBTPoBPzo9UzELG">
+      <div class="sec-head rv" data-page-node-id="wwfd52nERnEPl1Eeey4zZz">
+        <p class="sec-label" data-page-node-id="Jd1N8C1Ux8IZYrttWcewFQ"><b data-page-node-id="rdTZC3vKmoip3Eg43OQt28">/02</b> Selected Work</p>
+        <p class="sec-note" data-page-node-id="VfgUSRDPWSxvXcaMB6M6Uc">Draft &#183; sample figures</p>
+      </div>
+      <h2 class="sec-title rv" data-page-node-id="90w5Gmz9FuD1M0TuqYcNsH">Three problems worth solving.</h2>
+      <p class="lede rv" style="margin-top:22px;margin-bottom:20px" data-page-node-id="8SzQT6mTf1mLZyln5ZxH8m">
+        A collection of high-impact initiatives where I integrated AI and automation into the UX core, transforming traditional design workflows into intelligent, scalable systems that drive measurable efficiency.
+      </p>
+
+
+      <div class="work-grid" data-page-node-id="WHdXPClC8DoOuMBwKsq3tL">
+        
+        <article class="card rv">
+          <figure class="shot">
+            <img src="assets/case-01-screenshot.png" alt="InkBuddy CLI dashboard showing token synchronization metrics and CLI output.">
+            <figcaption><span>DX · CLI Tooling</span><span class="badge">Live</span></figcaption>
+          </figure>
+          <div class="card-body">
+            <span class="kicker">Design System · Enterprise SaaS</span>
+            <h3>InkBuddy CLI</h3>
+            <p>A high-performance design system CLI that automates token generation and scaffolding. Bridging the gap between Figma and production code with zero-latency synchronization.</p>
+            <ul class="metrics">
+              <li><b>&lt;40ms</b><span>Token Sync</span></li>
+              <li><b>100%</b><span>Typed Output</span></li>
+              <li><b>3</b><span>MCP Tools</span></li>
+            </ul>
+            <dl>
+              <div><dt>The Problem</dt><dd>Manual design system updates lead to drift and production regressions across multiple platforms.</dd></div>
+              <div><dt>The Solution</dt><dd>A unified CLI that generates type-safe tokens and scaffolds components based on design tokens.</dd></div>
+            </dl>
+            <a href="https://inkbuddy-cli.inkstellar.in/" class="case-card-link" target="_blank" rel="noopener" style="display:inline-block;margin-top:15px;font-family:var(--mono);font-size:12px;color:var(--accent);text-decoration:none;border:1px solid var(--accent);padding:4px 10px;border-radius:4px;">View Showcase →</a>
+          </div>
+        </article>
+
+        
+        <article class="card rv">
+          <figure class="shot">
+            <img src="assets/case-02-screenshot.png" alt="A11y Audit Tool dashboard showing a timeline of accessibility improvements and violation reports.">
+            <figcaption><span>UX · Accessibility</span><span class="badge">Live</span></figcaption>
+          </figure>
+          <div class="card-body">
+            <span class="kicker">Accessibility · Compliance</span>
+            <h3>A11y Audit Tool</h3>
+            <p>Enterprise-grade accessibility auditing system. Automated scanning and manual review orchestration to ensure WCAG 2.1 compliance across complex web applications.</p>
+            <ul class="metrics">
+              <li><b>12k+</b><span>Nodes Scanned</span></li>
+              <li><b>85%</b><span>Auto-fix Rate</span></li>
+              <li><b>AA</b><span>Compliance</span></li>
+            </ul>
+            <dl>
+              <div><dt>The Problem</dt><dd>Accessibility is often an afterthought, leading to expensive late-stage fixes and legal risks.</dd></div>
+              <div><dt>The Solution</dt><dd>A comprehensive audit dashboard with historical tracking and automated remediation suggestions.</dd></div>
+            </dl>
+            <a href="https://a11y-audit.inkstellar.in/" class="case-card-link" target="_blank" rel="noopener" style="display:inline-block;margin-top:15px;font-family:var(--mono);font-size:12px;color:var(--accent);text-decoration:none;border:1px solid var(--accent);padding:4px 10px;border-radius:4px;">View Showcase →</a>
+          </div>
+        </article>
+
+        
+        <article class="card rv">
+          <figure class="shot">
+            <img src="assets/case-03-screenshot.png" alt="AI Pipeline Orchestrator Dashboard showing automated token flow from Figma to Production with a real-time execution log.">
+            <figcaption><span>AI · Developer Tooling</span><span class="badge">Live</span></figcaption>
+          </figure>
+          <div class="card-body">
+            <span class="kicker">AI Orchestration · Developer Tooling</span>
+            <h3>AI Pipeline Orchestrator</h3>
+            <p>Putting AI inside the design system workflow. Driving AI adoption across UX and engineering: AI-assisted design systems, agentic UI platforms and automated UX workflows.</p>
+            <ul class="metrics">
+              <li><b>11h</b><span>Saved per sprint</span></li>
+              <li><b>0</b><span>Manual docs</span></li>
+              <li><b>100%</b><span>Automated</span></li>
+            </ul>
+            <dl>
+              <div><dt>The Problem</dt><dd>Manual token handoff between Figma and code is error-prone and consumes hours of engineering time every sprint.</dd></div>
+              <div><dt>The Solution</dt><dd>An agentic orchestrator that ingests Figma tokens, transforms them via Style Dictionary, and manages GitHub PRs automatically.</dd></div>
+            </dl>
+            <a href="https://ai-pipeline.inkstellar.in/" class="case-card-link" target="_blank" rel="noopener" style="display:inline-block;margin-top:15px;font-family:var(--mono);font-size:12px;color:var(--accent);text-decoration:none;border:1px solid var(--accent);padding:4px 10px;border-radius:4px;">View Showcase →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EXPERIENCE ================= -->
+  <section id="experience" data-page-node-id="BfUXXFEvYfxFNEEGNWa6Aq">
+    <div class="wrap" data-page-node-id="YN65otmcyimgBnTPJ4DtlZ">
+      <div class="sec-head rv" data-page-node-id="7R5ABuLAKwdY9v7yHnjpnd">
+        <p class="sec-label" data-page-node-id="4bpkrsPV2UWVNxBo2YCfda"><b data-page-node-id="Xdl8J4w2U2OVwYuCJ9ayyV">/03</b> Experience</p>
+        <p class="sec-note" data-page-node-id="XcAb67LF0tekd4CBD9zWPp">2009 — present</p>
+      </div>
+      <h2 class="sec-title rv" data-page-node-id="uapbg2gMNh99txhAukjqGB">A design journey of more than a decade.</h2>
+
+      <div class="tl" style="margin-top:clamp(34px,4.4vw,56px)" data-page-node-id="6VBXUSqOWeHkjudmxs6PDl">
+        <div class="tl-group rv" data-page-node-id="1idyderxax3c6qJ2CpUYYz">
+          <div class="tl-head" data-page-node-id="WNxWHdxusXzbCdn1DuiZw7">
+            <h3 data-page-node-id="A2H8dMprwWOCEKYSZT1Tne">FE fundinfo</h3>
+            <span class="span" data-page-node-id="QuiBP835YEZRIUhjOHsqQy">Chennai, India · 12 yrs 1 mo</span>
+          </div>
+          <div class="tl-rows" data-page-node-id="S24lGmVHQ6mfk3eCiueKNY">
+            <div class="row lead" data-page-node-id="E58SqSGaCmmwlXtSRPkh2b">
+              <span class="role" data-page-node-id="xifoiW2ctgnlaBKEMzPPm3">Senior UX Engineer<small data-page-node-id="CzHioaGkkcDLQIGi3RKAeb">Current</small></span>
+              <span class="when" data-page-node-id="xEcOcEGo44bdhMEztZt9JK">Mar 2025 — Present</span>
+            </div>
+            <div class="row" data-page-node-id="EJvyDDbduYXMRuHDv6YFOP">
+              <span class="role" data-page-node-id="h0FEUA0ndZaRlV5ETfYCuG">UX Engineer</span>
+              <span class="when" data-page-node-id="ubgfAqCcLury9NxgaH8cs2">Sep 2023 — Present</span>
+            </div>
+            <div class="row" data-page-node-id="BHFLRzltH8kr3eAqkW02oJ">
+              <span class="role" data-page-node-id="NgpS4Tr9JZRfd9TEOhYTjT">Product Designer</span>
+              <span class="when" data-page-node-id="iE9PhWpjku08bVxqTpWlh6">Jul 2019 — Nov 2023</span>
+            </div>
+            <div class="row" data-page-node-id="moWLXAdJSc07ZLidw6ECeJ">
+              <span class="role" data-page-node-id="eVflzG4uJD3aVfHGk19NZ2">Senior UI Designer</span>
+              <span class="when" data-page-node-id="IRgIx2FNbZFmPk2EcUiHJN">Sep 2014 — Jun 2019</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-group rv" data-page-node-id="naKgEF7LpbBXtGyJCDFv4c">
+          <div class="tl-head" data-page-node-id="dtpAZyckk6YylTBTuiZJGA">
+            <h3 data-page-node-id="aWPgZZVlHpV3U5Dz6BA6Ca">Earlier</h3>
+            <span class="span" data-page-node-id="ckr4FhkCJWcZzSEeXhBFYW">Chennai, India</span>
+          </div>
+          <div class="tl-rows" data-page-node-id="hBfUEWoEEuhnP6gh4FAzzq">
+            <div class="row" data-page-node-id="eF7o8DeEjrAS9X6CfCq6DN">
+              <span class="role" data-page-node-id="xuvKspFb7p20altacuLnGp">Web Designer<small data-page-node-id="705V6jEDRh6hLD9ZxjkhHx">Career Optionz</small></span>
+              <span class="when" data-page-node-id="4JNDLIZp2bYTsC2h6uRo9Z">Sep 2012 — Mar 2013</span>
+            </div>
+            <div class="row" data-page-node-id="lAnBiTNBnPZSX00roMF5rZ">
+              <span class="role" data-page-node-id="rPXV2CSGi0NJa0ZUqEkv3L">Web Designer<small data-page-node-id="YcfwdnkjTsWTcSpf2bNpZj">The Connectorz</small></span>
+              <span class="when" data-page-node-id="cFXfhOZcBWSAjih1UzLaUr">Dec 2009 — Mar 2011</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-group rv" data-page-node-id="6KKWm8lKLV4bRnjr5HA0mM">
+          <div class="tl-head" data-page-node-id="5cFXXOBq0LTBFfDcdH77uU">
+            <h3 data-page-node-id="kDVVEMqrrTDHpiLvH0f4fQ">Education</h3>
+            <span class="span" data-page-node-id="5oVJOBYm9gp2yMpnXd3rV6">2005 — 2009</span>
+          </div>
+          <div class="tl-rows" data-page-node-id="VZN0Npy1MVyiUctmQmfBhn">
+            <div class="row" data-page-node-id="nXef3d1Ec3rTWTzwsuBJnZ">
+              <span class="role" data-page-node-id="GxJDE2NHX7QZfj5GVU31FY">B.Tech, Information Technology<small data-page-node-id="UmTcD3LeVjoBETe1onCirF">SSN College of Engineering</small></span>
+              <span class="when" data-page-node-id="w6VoNeIBiw93FoX8hDlksE">2005 — 2009</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TOOLBOX ================= -->
+  <section id="toolbox" data-page-node-id="0CrDoepkoUFmUQTJMIBmv8">
+    <div class="wrap" data-page-node-id="WebVEGF0XbjLCciBlpIJBE">
+      <div class="sec-head rv" data-page-node-id="NnNnxT0IVYsyAbZ6CSy97s">
+        <p class="sec-label" data-page-node-id="7Bi00sDI9J4S1kZn3pzPAx"><b data-page-node-id="MeNJYEtGZd5Ls5yn2cUUW9">/04</b> Toolbox</p>
+        <p class="sec-note" data-page-node-id="E4GMHqAMcNdDmG98Ve8hyZ">What I reach for</p>
+      </div>
+      <h2 class="sec-title rv" data-page-node-id="Ejv4dDGmIT6Mcgr53BKPAH">Tools are the easy part.</h2>
+
+      <div class="tools" style="margin-top:clamp(34px,4.4vw,56px)" data-page-node-id="3jjDdAWrqDZs1p2PW0BBCE">
+        <div class="tool-col rv" data-page-node-id="CaFJsmVopMfqiN5bBc1Skh">
+          <h3 data-page-node-id="RnwUoRBClxWQmOviwJonK0">Design &amp; prototyping</h3>
+          <ul data-page-node-id="pn54TV9LhmGb24zjG8niO1"><li data-page-node-id="6KcangjiBFHfI2GAjWHJ0E">Figma — auto layout, variables, components</li><li data-page-node-id="4yoeZEZQiOHA0wYgkBAvue">Sketch</li><li data-page-node-id="VnzhASUL8h7bnC6cheoNVU">InVision</li><li data-page-node-id="Yp0L5VxddZOyHDsMYzMD9y">Zeplin</li><li data-page-node-id="oUA1g4GHGQtpPtePlGE1Ij">Mural</li></ul>
+        </div>
+        <div class="tool-col rv" data-page-node-id="dKCiEnikwbbjGgy7VDiOxV">
+          <h3 data-page-node-id="e9xlsxADM5cyRhhSvsqoq0">Systems &amp; engineering</h3>
+          <ul data-page-node-id="nFXtJXKVncxG60zfpH0GJW"><li data-page-node-id="XGB3gXdy6P6iIyvgcFK38A">React component libraries</li><li data-page-node-id="R1WXknP97y1vU6YJU7mL15">Design tokens</li><li data-page-node-id="8cCDx94YNg3fpUmyNRkipA">HTML / CSS</li><li data-page-node-id="me1ojiUvFAh89YhB6wXNOk">Progressive Web Apps</li><li data-page-node-id="mKvdOWFE8KRiT6BZyXWzCU">Accessibility frameworks (WCAG)</li></ul>
+        </div>
+        <div class="tool-col rv" data-page-node-id="nCwUCyAUI0BoOsZudi5t6Y">
+          <h3 data-page-node-id="inLPvDOsT8iBnhh7IfNPuC">AI &amp; automation</h3>
+          <ul data-page-node-id="SDCwaBNMnjYQpbn3lzZ6yL"><li data-page-node-id="gDAzJqpAjcoV2lwenWtouZ">MCP Extensions for UI</li><li data-page-node-id="jn3jUeuBm9O8lxJUiYZkBr">Agentic UI Architecture</li><li data-page-node-id="wDI5LIcwBTZvyB2B997jDc">AI Workflow Engineering</li><li data-page-node-id="Dr5dpPkS8uI1lA5FzWcqoA">Claude / Devin / Replit</li></ul>
+        </div>
+        <div class="tool-col rv" data-page-node-id="zN7RSGwEjmYU0EOjBoQDrh">
+          <h3 data-page-node-id="qX3txJ929g4dKfLbowRDrh">Ways of working</h3>
+          <ul data-page-node-id="uR4ZRBbRg2lGsGT3SWeB7G"><li data-page-node-id="LCRPeXyMJ23K9FmFZsfuAy">Bridging product, design &amp; engineering</li><li data-page-node-id="2p1iLFLAOpuVOasBKKSpjr">Design critique</li><li data-page-node-id="ui1kLAtEqkYVV6PE2M44L1">Mentoring</li><li data-page-node-id="SflLNqePrHeLTH9i9uDapu">Agile team consultation</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section class="contact" id="contact" data-page-node-id="RkjbrO19VNnG1WpusgwhEi">
+    <div class="wrap" data-page-node-id="4eCzDreV9110f7OsgjzLCq">
+      <div class="sec-head rv" style="border-bottom-color:var(--line)" data-page-node-id="dD0QF23d6gxcnaiipGlyDG">
+        <p class="sec-label" data-page-node-id="byd7IPmNcOJyVS4WLuqc4z"><b data-page-node-id="K5QHC62fheO1CdUI773Xro">/05</b> Contact</p>
+        <p class="sec-note" data-page-node-id="rE1Ve5TVGRwF5uTYKWpHT1">Usually replies within a day</p>
+      </div>
+      <h2 class="rv" data-page-node-id="QzXnIydvzy6HNd5WnvxdMa">Let's build something<br data-page-node-id="xCv7LLTLeaIz4o6gfAcqTE">worth reusing.</h2>
+      <div class="cta-row rv" data-page-node-id="YueuOzjDfSYLUUkgt17OxU">
+        <button class="btn primary" id="copy" data-email="kousiganmoni@gmail.com" data-page-node-id="h1h9UWCBwBiuB0P4ZxfuCX">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" data-page-node-id="ksCf3CZBdQb05k3CJCBhBO"><rect x="9" y="9" width="12" height="12" rx="2" data-page-node-id="kPagxMnJvFA1L5TXcBgdZQ"/><path d="M5 15V5a2 2 0 0 1 2-2h10" data-page-node-id="C5DwYeLapzNsiZ67hqeeoZ"/></svg>
+          <span id="copy-label" data-page-node-id="9k22P3o1wRXvFDcMh9nEjS">Copy email</span>
+        </button>
+        <a class="btn" href="mailto:kousiganmoni@gmail.com" data-page-node-id="ziTja9qera034vk3ghF2hF">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" data-page-node-id="ObDj6KDiEBLy2AbK9gKjFN"><rect x="2" y="4" width="20" height="16" rx="2" data-page-node-id="krx02paD4pBfUPbsdBy1HC"/><path d="m2 7 10 6 10-6" data-page-node-id="eldBVhB1mE7GxWBHUieA9t"/></svg>
+          Email me
+        </a>
+        <a class="btn" href="https://www.linkedin.com/in/kousiganmoni" target="_blank" rel="noopener noreferrer" data-page-node-id="OmtbqEsbTvVNEOlPe4WAK0">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" data-page-node-id="firmg7hbyWstmwMBsYLUZG"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95C20.4 8.75 21 11 21 14.1V21h-4v-6.1c0-1.45-.03-3.3-2.02-3.3-2.02 0-2.33 1.57-2.33 3.2V21H9z" data-page-node-id="q2BHo2jkoCa0gZsBEqSfG9"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer data-page-node-id="bUgf9SR6oAFGcsvfRCo4Pj">
+  <div class="wrap foot" data-page-node-id="t3s7wxGbQSDgI2g1yIzBT4">
+    <span data-page-node-id="t5mBeFmZ5MPTX2iZQoX8sH">© <span id="yr" data-page-node-id="8niQcPmx79KNhsFtyb38iO">2026</span> Kousigan Moni · Chennai, India</span>
+    <span data-page-node-id="iGCqYaKPMr2XZ23qLSqwEa">Designed &amp; built with an obsession for design systems</span>
+    <a href="#top" data-page-node-id="TEcHxY9EtPjqAEug2QVhK3">Back to top ↑</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* local time, IST */
+  var clock = document.getElementById('clock');
+  function tick() {
+    try {
+      clock.textContent = new Intl.DateTimeFormat('en-GB', {
+        hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata', hour12: false
+      }).format(new Date()) + ' IST';
+    } catch (e) { clock.textContent = 'IST'; }
+  }
+  tick(); setInterval(tick, 30000);
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* scroll progress + stuck nav */
+  var bar = document.getElementById('bar');
+  var nav = document.getElementById('nav');
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+      nav.classList.toggle('stuck', window.scrollY > 12);
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* reveal on scroll */
+  var items = document.querySelectorAll('.rv');
+  if (reduce || !('IntersectionObserver' in window)) {
+    items.forEach(function (el) { el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    items.forEach(function (el, i) {
+      el.style.transitionDelay = Math.min(i % 6, 5) * 55 + 'ms';
+      io.observe(el);
+    });
+  }
+
+  /* copy email */
+  var btn = document.getElementById('copy');
+  var label = document.getElementById('copy-label');
+  btn.addEventListener('click', function () {
+    var email = btn.dataset.email;
+    var done = function () {
+      label.textContent = 'Copied ✓';
+      setTimeout(function () { label.textContent = 'Copy email'; }, 1900);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(email).then(done).catch(function () { fallback(email, done); });
+    } else { fallback(email, done); }
+  });
+  function fallback(text, done) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); done(); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+})();
+</script>
+</body>
+</html>

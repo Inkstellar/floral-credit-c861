@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Placeholder image showing a design system component library">
+  <rect width="1600" height="900" fill="#0F0F12"/>
+
+  <!-- window chrome -->
+  <rect x="0" y="0" width="1600" height="54" fill="#141418"/>
+  <line x1="0" y1="54" x2="1600" y2="54" stroke="#25252B" stroke-width="1"/>
+  <circle cx="30" cy="27" r="6" fill="#34343C"/>
+  <circle cx="52" cy="27" r="6" fill="#34343C"/>
+  <circle cx="74" cy="27" r="6" fill="#34343C"/>
+  <rect x="112" y="16" width="310" height="22" rx="11" fill="#1B1B20"/>
+  <text x="128" y="31" font-family="monospace" font-size="12" fill="#8A8A94">design-system.local / components</text>
+
+  <!-- sidebar -->
+  <rect x="0" y="54" width="248" height="846" fill="#121215"/>
+  <line x1="248" y1="54" x2="248" y2="900" stroke="#25252B" stroke-width="1"/>
+  <rect x="0" y="84" width="3" height="32" fill="#D4FF3F"/>
+  <text x="30" y="105" font-family="monospace" font-size="12.5" fill="#F2F2EE" letter-spacing="1.2">COMPONENTS</text>
+  <text x="30" y="151" font-family="monospace" font-size="12.5" fill="#8A8A94" letter-spacing="1.2">FOUNDATIONS</text>
+  <text x="30" y="190" font-family="monospace" font-size="12.5" fill="#8A8A94" letter-spacing="1.2">PATTERNS</text>
+  <text x="30" y="229" font-family="monospace" font-size="12.5" fill="#8A8A94" letter-spacing="1.2">TOKENS</text>
+  <text x="30" y="268" font-family="monospace" font-size="12.5" fill="#8A8A94" letter-spacing="1.2">ACCESSIBILITY</text>
+  <text x="30" y="307" font-family="monospace" font-size="12.5" fill="#8A8A94" letter-spacing="1.2">CHANGELOG</text>
+  <line x1="24" y1="348" x2="224" y2="348" stroke="#25252B" stroke-width="1"/>
+  <text x="30" y="382" font-family="monospace" font-size="11" fill="#5E5E68" letter-spacing="1.4">VERSION</text>
+  <text x="30" y="408" font-family="monospace" font-size="13" fill="#D4FF3F" letter-spacing="1">v3.2.0</text>
+
+  <!-- page title -->
+  <text x="292" y="106" font-family="sans-serif" font-size="26" font-weight="600" fill="#F2F2EE" letter-spacing="-0.5">Components</text>
+  <text x="292" y="134" font-family="monospace" font-size="12" fill="#8A8A94" letter-spacing="0.6">142 published &#183; 9 teams consuming</text>
+  <rect x="1290" y="88" width="230" height="34" rx="17" fill="#D4FF3F"/>
+  <text x="1316" y="110" font-family="monospace" font-size="12" fill="#0A0A0A" letter-spacing="0.8">VIEW TOKENS</text>
+
+  <!-- row 1 -->
+  <rect x="290" y="160" width="390" height="212" rx="12" fill="#141418" stroke="#25252B"/>
+  <text x="316" y="194" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.4">BUTTON</text>
+  <rect x="316" y="216" width="150" height="44" rx="22" fill="#D4FF3F"/>
+  <text x="348" y="244" font-family="monospace" font-size="12" fill="#0A0A0A" letter-spacing="0.8">PRIMARY</text>
+  <rect x="482" y="216" width="150" height="44" rx="22" fill="none" stroke="#34343C"/>
+  <text x="518" y="244" font-family="monospace" font-size="12" fill="#F2F2EE" letter-spacing="0.8">GHOST</text>
+  <rect x="316" y="286" width="130" height="34" rx="17" fill="none" stroke="#34343C"/>
+  <text x="345" y="308" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="0.8">SMALL</text>
+  <rect x="462" y="286" width="170" height="34" rx="17" fill="none" stroke="#34343C" stroke-dasharray="4 4"/>
+  <text x="496" y="308" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="0.8">DISABLED</text>
+
+  <rect x="710" y="160" width="390" height="212" rx="12" fill="#141418" stroke="#25252B"/>
+  <text x="736" y="194" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.4">TEXT FIELD</text>
+  <rect x="736" y="216" width="338" height="46" rx="8" fill="#0F0F12" stroke="#34343C"/>
+  <text x="756" y="245" font-family="sans-serif" font-size="14" fill="#F2F2EE">kousigan@example.com</text>
+  <rect x="736" y="278" width="338" height="46" rx="8" fill="#0F0F12" stroke="#D4FF3F" stroke-width="2"/>
+  <text x="756" y="307" font-family="sans-serif" font-size="14" fill="#F2F2EE">Focused state</text>
+
+  <rect x="1130" y="160" width="390" height="212" rx="12" fill="#141418" stroke="#25252B"/>
+  <text x="1156" y="194" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.4">CARD</text>
+  <rect x="1156" y="216" width="338" height="130" rx="10" fill="#0F0F12" stroke="#25252B"/>
+  <rect x="1178" y="238" width="120" height="12" rx="6" fill="#34343C"/>
+  <rect x="1178" y="262" width="290" height="8" rx="4" fill="#25252B"/>
+  <rect x="1178" y="280" width="240" height="8" rx="4" fill="#25252B"/>
+  <rect x="1178" y="306" width="96" height="28" rx="14" fill="#D4FF3F" opacity="0.9"/>
+
+  <!-- row 2 -->
+  <rect x="290" y="394" width="390" height="212" rx="12" fill="#141418" stroke="#25252B"/>
+  <text x="316" y="428" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.4">BADGE / TAG</text>
+  <rect x="316" y="452" width="96" height="32" rx="16" fill="#D4FF3F" opacity="0.16" stroke="#D4FF3F"/>
+  <text x="340" y="473" font-family="monospace" font-size="11" fill="#D4FF3F" letter-spacing="0.8">ACTIVE</text>
+  <rect x="424" y="452" width="104" height="32" rx="16" fill="none" stroke="#34343C"/>
+  <text x="448" y="473" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="0.8">DRAFT</text>
+  <rect x="540" y="452" width="118" height="32" rx="16" fill="none" stroke="#34343C"/>
+  <text x="562" y="473" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="0.8">ARCHIVED</text>
+  <rect x="316" y="508" width="360" height="1" fill="#25252B"/>
+  <text x="316" y="542" font-family="monospace" font-size="11" fill="#5E5E68" letter-spacing="1.2">3 VARIANTS &#183; 2 SIZES</text>
+  <text x="316" y="570" font-family="monospace" font-size="11" fill="#5E5E68" letter-spacing="1.2">AA CONTRAST VERIFIED</text>
+
+  <rect x="710" y="394" width="390" height="212" rx="12" fill="#141418" stroke="#25252B"/>
+  <text x="736" y="428" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.4">TABS</text>
+  <rect x="736" y="452" width="338" height="40" rx="8" fill="#0F0F12"/>
+  <rect x="742" y="457" width="106" height="30" rx="6" fill="#25252B"/>
+  <text x="764" y="477" font-family="monospace" font-size="11" fill="#F2F2EE" letter-spacing="0.8">OVERVIEW</text>
+  <text x="868" y="477" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="0.8">API</text>
+  <text x="924" y="477" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="0.8">A11Y</text>
+  <text x="990" y="477" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="0.8">CHANGELOG</text>
+  <rect x="736" y="516" width="290" height="8" rx="4" fill="#25252B"/>
+  <rect x="736" y="536" width="338" height="8" rx="4" fill="#25252B"/>
+  <rect x="736" y="556" width="210" height="8" rx="4" fill="#25252B"/>
+
+  <rect x="1130" y="394" width="390" height="212" rx="12" fill="#141418" stroke="#25252B"/>
+  <text x="1156" y="428" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.4">MODAL</text>
+  <rect x="1156" y="450" width="338" height="140" rx="10" fill="#0F0F12" stroke="#34343C"/>
+  <rect x="1178" y="472" width="140" height="11" rx="5" fill="#34343C"/>
+  <rect x="1178" y="500" width="290" height="7" rx="3" fill="#25252B"/>
+  <rect x="1178" y="516" width="250" height="7" rx="3" fill="#25252B"/>
+  <rect x="1364" y="544" width="104" height="30" rx="15" fill="#D4FF3F"/>
+  <text x="1386" y="564" font-family="monospace" font-size="11" fill="#0A0A0A" letter-spacing="0.8">CONFIRM</text>
+  <rect x="1252" y="544" width="100" height="30" rx="15" fill="none" stroke="#34343C"/>
+  <text x="1278" y="564" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="0.8">CANCEL</text>
+
+  <!-- row 3 -->
+  <rect x="290" y="628" width="390" height="212" rx="12" fill="#141418" stroke="#25252B"/>
+  <text x="316" y="662" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.4">TABLE</text>
+  <rect x="316" y="684" width="338" height="30" fill="#1B1B20"/>
+  <text x="330" y="704" font-family="monospace" font-size="10" fill="#8A8A94" letter-spacing="1">NAME</text>
+  <text x="500" y="704" font-family="monospace" font-size="10" fill="#8A8A94" letter-spacing="1">STATUS</text>
+  <text x="610" y="704" font-family="monospace" font-size="10" fill="#8A8A94" letter-spacing="1">OWNER</text>
+  <line x1="316" y1="714" x2="654" y2="714" stroke="#25252B"/>
+  <rect x="316" y="726" width="120" height="7" rx="3" fill="#25252B"/>
+  <rect x="316" y="752" width="150" height="7" rx="3" fill="#25252B"/>
+  <rect x="316" y="778" width="100" height="7" rx="3" fill="#25252B"/>
+  <rect x="490" y="726" width="76" height="20" rx="10" fill="#D4FF3F" opacity="0.16"/>
+  <rect x="490" y="752" width="76" height="20" rx="10" fill="#25252B"/>
+  <rect x="490" y="778" width="76" height="20" rx="10" fill="#25252B"/>
+
+  <rect x="710" y="628" width="390" height="212" rx="12" fill="#141418" stroke="#25252B"/>
+  <text x="736" y="662" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.4">TOAST</text>
+  <rect x="736" y="686" width="338" height="56" rx="10" fill="#0F0F12" stroke="#D4FF3F"/>
+  <circle cx="766" cy="714" r="9" fill="#D4FF3F"/>
+  <path d="M762 714 l3.5 4 l7 -8" stroke="#0A0A0A" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="790" y="702" width="150" height="8" rx="4" fill="#34343C"/>
+  <rect x="790" y="718" width="220" height="7" rx="3" fill="#25252B"/>
+  <text x="736" y="784" font-family="monospace" font-size="11" fill="#5E5E68" letter-spacing="1.2">ANNOUNCED VIA LIVE REGION</text>
+
+  <rect x="1130" y="628" width="390" height="212" rx="12" fill="#141418" stroke="#25252B"/>
+  <text x="1156" y="662" font-family="monospace" font-size="11" fill="#8A8A94" letter-spacing="1.4">NAV</text>
+  <rect x="1156" y="686" width="338" height="48" rx="10" fill="#0F0F12"/>
+  <rect x="1170" y="700" width="90" height="20" rx="4" fill="#34343C"/>
+  <text x="1180" y="714" font-family="monospace" font-size="10" fill="#8A8A94" letter-spacing="1">PRODUCTS</text>
+  <rect x="1290" y="700" width="70" height="20" rx="4" fill="none"/>
+  <text x="1300" y="714" font-family="monospace" font-size="10" fill="#8A8A94" letter-spacing="1">PRICING</text>
+  <text x="1396" y="714" font-family="monospace" font-size="10" fill="#8A8A94" letter-spacing="1">DOCS</text>
+  <rect x="1156" y="756" width="338" height="56" rx="10" fill="#0F0F12" stroke="#25252B"/>
+  <text x="1170" y="790" font-family="monospace" font-size="10" fill="#5E5E68" letter-spacing="1">MOBILE MENU PATTERN</text>
+
+  <!-- sample stamp -->
+  <rect x="1218" y="858" width="302" height="30" rx="6" fill="#0F0F12" stroke="#D4FF3F" stroke-dasharray="5 4"/>
+  <text x="1236" y="878" font-family="monospace" font-size="11" fill="#D4FF3F" letter-spacing="1.4">SAMPLE IMAGE &#8212; REPLACE ME</text>
+</svg>
