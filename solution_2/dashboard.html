@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>a11y-audit — Component Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-outermost:    #0a0c12;
+            --bg-card:         #13161f;
+            --bg-card-inner:   #1c2030;
+            --border-subtle:   #2a2d3a;
+            --color-success:   #4ade80;
+            --color-warning:   #f59e0b;
+            --color-error:     #ef4444;
+            --color-info:      #3b82f6;
+            --color-text-pri:  #e2e8f0;
+            --color-text-sec:  #64748b;
+            --color-text-mono: #94a3b8;
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-outermost);
+            color: var(--color-text-pri);
+            font-family: var(--font-sans);
+            padding: 60px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            margin-bottom: 48px;
+            text-align: left;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--color-text-sec);
+            font-size: 16px;
+            max-width: 600px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .product-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-decoration: none;
+            color: inherit;
+            animation: cardSlideIn 0.5s ease-out both;
+        }
+
+        @keyframes cardSlideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .product-card:hover {
+            border-color: var(--color-success);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+            background-color: #161a25;
+        }
+
+        .product-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text-pri);
+        }
+
+        .product-score-badge {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 20px;
+            padding: 4px 12px;
+            border-radius: 8px;
+            background: var(--bg-card-inner);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .score-high { color: var(--color-success); }
+        .score-mid { color: var(--color-warning); }
+        .score-low { color: var(--color-error); }
+
+        .product-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .metric-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--color-text-mono);
+            letter-spacing: 0.05em;
+        }
+
+        .metric-value {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .product-footer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--color-text-sec);
+            margin-top: auto;
+        }
+
+        .view-link {
+            color: var(--color-success);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .view-link:hover {
+            text-decoration: underline;
+        }
+    
+        /* Insights Section */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        .insight-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .insight-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--color-text-mono);
+            letter-spacing: 0.05em;
+        }
+        .insight-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--color-text-pri);
+        }
+        .insight-trend {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .trend-up { color: var(--color-success); }
+        .trend-down { color: var(--color-error); }
+
+        @media (max-width: 1024px) {
+            .insights-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .insights-grid { grid-template-columns: 1fr; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>a11y-audit Dashboard</h1>
+            <p>Real-time accessibility compliance monitoring across InkBuddy component libraries. Select a product to view its detailed scorecard.</p>
+        </div>
+
+        
+        <div class="insights-grid">
+            <div class="insight-card">
+                <span class="insight-label">Total Audits Run</span>
+                <span class="insight-value">1,248</span>
+                <span class="insight-trend trend-up">↑ 12% vs last month</span>
+            </div>
+            <div class="insight-card">
+                <span class="insight-label">Avg. Compliance Score</span>
+                <span class="insight-value">82.4%</span>
+                <span class="insight-trend trend-up">↑ 4.1% improvement</span>
+            </div>
+            <div class="insight-card">
+                <span class="insight-label">Critical Issues Resolved</span>
+                <span class="insight-value">312</span>
+                <span class="insight-trend trend-up">✓ Target reached</span>
+            </div>
+            <div class="insight-card">
+                <span class="insight-label">Audit Velocity</span>
+                <span class="insight-value">4.2/day</span>
+                <span class="insight-trend trend-down">↓ 0.5 slow down</span>
+            </div>
+        </div>
+
+        <div class="product-grid">
+            <!-- InkBuddy Core -->
+            <a href="index.html" class="product-card" style="animation-delay: 0.1s;">
+                <div class="product-top">
+                    <div class="product-name">InkBuddy Core Primitives</div>
+                    <div class="product-score-badge score-high">98.2</div>
+                </div>
+                <div class="product-metrics">
+                    <div class="metric-item">
+                        <span class="metric-label">Critical Issues</span>
+                        <span class="metric-value">0</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Warnings</span>
+                        <span class="metric-value">3</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">WCAG Level</span>
+                        <span class="metric-value">AA</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Components</span>
+                        <span class="metric-value">15</span>
+                    </div>
+                </div>
+                <div class="product-footer">
+                    <span>Last Run: 2h ago</span>
+                    <span class="view-link">View Scorecard →</span>
+                </div>
+            </a>
+
+            <!-- Enterprise UI -->
+            <a href="index.html" class="product-card" style="animation-delay: 0.2s;">
+                <div class="product-top">
+                    <div class="product-name">Enterprise Dashboard Kit</div>
+                    <div class="product-score-badge score-mid">84.5</div>
+                </div>
+                <div class="product-metrics">
+                    <div class="metric-item">
+                        <span class="metric-label">Critical Issues</span>
+                        <span class="metric-value">2</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Warnings</span>
+                        <span class="metric-value">11</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">WCAG Level</span>
+                        <span class="metric-value">A</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Components</span>
+                        <span class="metric-value">42</span>
+                    </div>
+                </div>
+                <div class="product-footer">
+                    <span>Last Run: 1d ago</span>
+                    <span class="view-link">View Scorecard →</span>
+                </div>
+            </a>
+
+            <!-- Mobile Design System -->
+            <a href="index.html" class="product-card" style="animation-delay: 0.3s;">
+                <div class="product-top">
+                    <div class="product-name">Mobile Design System</div>
+                    <div class="product-score-badge score-high">92.1</div>
+                </div>
+                <div class="product-metrics">
+                    <div class="metric-item">
+                        <span class="metric-label">Critical Issues</span>
+                        <span class="metric-value">0</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Warnings</span>
+                        <span class="metric-value">5</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">WCAG Level</span>
+                        <span class="metric-value">AA</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Components</span>
+                        <span class="metric-value">28</span>
+                    </div>
+                </div>
+                <div class="product-footer">
+                    <span>Last Run: 4h ago</span>
+                    <span class="view-link">View Scorecard →</span>
+                </div>
+            </a>
+
+            <!-- Legacy Portal -->
+            <a href="index.html" class="product-card" style="animation-delay: 0.4s;">
+                <div class="product-top">
+                    <div class="product-name">Legacy Client Portal</div>
+                    <div class="product-score-badge score-low">61.4</div>
+                </div>
+                <div class="product-metrics">
+                    <div class="metric-item">
+                        <span class="metric-label">Critical Issues</span>
+                        <span class="metric-value">14</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Warnings</span>
+                        <span class="metric-value">22</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">WCAG Level</span>
+                        <span class="metric-value">N/A</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Components</span>
+                        <span class="metric-value">110</span>
+                    </div>
+                </div>
+                <div class="product-footer">
+                    <span>Last Run: 1w ago</span>
+                    <span class="view-link">View Scorecard →</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

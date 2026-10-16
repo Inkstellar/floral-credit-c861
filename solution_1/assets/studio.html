@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InkBuddy Studio | Component Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #050505; 
+            --bg-surface: #0a0a0a;
+            --bg-card: #111111;
+            --border-color: #1f1f1f;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --accent: #4ade80;
+            --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: "SF Mono", "Fira Code", "Menlo", "Consolas", monospace;
+        }
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            overflow: hidden;
+        }
+        .glass {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+        }
+        .sidebar-item {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border-left: 2px solid transparent;
+        }
+        .sidebar-item.active {
+            background: var(--bg-card);
+            border-left-color: var(--accent);
+            color: white;
+        }
+        .preview-canvas {
+            background-image: radial-gradient(circle, #1f1f1f 1px, transparent 1px);
+            background-size: 24px 24px;
+            background-color: #080808;
+        }
+        .prop-input {
+            background: #000;
+            border: 1px solid var(--border-color);
+            color: white;
+            font-family: var(--font-mono);
+            font-size: 12px;
+        }
+        .prop-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        /* Component-specific styles based on tokens.json */
+        .ib-button {
+            transition: all 0.2s ease;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .ib-button-primary {
+            background-color: var(--accent);
+            color: #050505;
+        }
+        .ib-button-secondary {
+            background-color: var(--border-color);
+            color: white;
+        }
+        .ib-input {
+            background: #000;
+            border: 1px solid var(--border-color);
+            color: white;
+            outline: none;
+        }
+        .ib-input:focus {
+            border-color: var(--accent);
+        }
+        /* Switch Styles */
+        .ib-switch-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .ib-switch {
+            width: 40px;
+            height: 20px;
+            background-color: var(--border-color);
+            border-radius: var(--radius-full);
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .ib-switch.active {
+            background-color: var(--accent);
+        }
+        .ib-switch-thumb {
+            width: 16px;
+            height: 16px;
+            background-color: white;
+            border-radius: var(--radius-full);
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s ease;
+        }
+        .ib-switch.active .ib-switch-thumb {
+            transform: translateX(20px);
+        }
+        /* Tabs Styles */
+        .ib-tabs-list {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 12px;
+        }
+        .ib-tab-trigger {
+            padding: 6px 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .ib-tab-trigger.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        .ib-tab-content {
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 8px 0;
+        }
+        /* Accordion Styles */
+        .ib-accordion-item {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+        .ib-accordion-trigger {
+            padding: 12px;
+            background: var(--bg-surface);
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ib-accordion-content {
+            padding: 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-main);
+        }
+    </style>
+
+    </style>
+</head>
+<body class="h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="h-14 border-b border-[#1f1f1f] flex items-center justify-between px-6 bg-black z-10">
+        <div class="flex items-center gap-3">
+            <div class="w-5 h-5 bg-white text-black rounded flex items-center justify-center font-mono font-bold text-[10px]">IB</div>
+            <span class="text-sm font-medium tracking-tight">InkBuddy <span class="text-emerald-500">Studio</span></span>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="text-xs text-[#a1a1aa] hover:text-white transition-colors"><i class="fas fa-arrow-left mr-1"></i> Back to Site</a>
+            <div class="h-4 w-[1px] bg-[#1f1f1f]"></div>
+            <span class="text-[10px] font-mono text-[#555]">v1.1-stable</span>
+        </div>
+    </header>
+
+    <div class="flex-1 flex overflow-hidden">
+        <!-- Sidebar: Component List -->
+        <aside class="w-64 border-r border-[#1f1f1f] bg-black flex flex-col">
+            <div class="p-4">
+                <span class="text-[10px] font-mono uppercase tracking-widest text-[#555]">Primitives</span>
+            </div>
+            <nav id="component-list" class="flex-1 overflow-y-auto px-2 pb-4">
+                <!-- Items injected by JS -->
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col bg-main">
+            <!-- Top Toolbar -->
+            <div class="h-12 border-b border-[#1f1f1f] flex items-center justify-between px-6 bg-[#0a0a0a]">
+                <div class="flex items-center gap-4">
+                    <h2 id="active-component-name" class="text-sm font-semibold">Select a component</h2>
+                    <span id="component-tag" class="text-[10px] font-mono px-2 py-0.5 rounded bg-[#111] border border-[#222] text-[#555]">--</span>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="toggleTheme()" class="p-1.5 rounded hover:bg-[#1f1f1f] text-[#555] hover:text-white transition-colors">
+                        <i class="fas fa-circle-half-stroke text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Studio Workspace -->
+            <div class="flex-1 flex overflow-hidden">
+                <!-- Preview Window -->
+                <div class="flex-1 relative overflow-hidden flex items-center justify-center p-12">
+                    <div id="preview-canvas" class="preview-canvas w-full h-full rounded-xl border border-[#1f1f1f] flex items-center justify-center transition-all duration-500">
+                        <div id="component-render-area">
+                            <!-- Component rendered here -->
+                            <div class="text-[#333] font-mono text-sm italic">Select a component from the sidebar to preview</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attribute Panel -->
+                <aside class="w-80 border-l border-[#1f1f1f] bg-[#0a0a0a] flex flex-col">
+                    <div class="p-4 border-b border-[#1f1f1f]">
+                        <h3 class="text-xs font-bold uppercase tracking-wider">Attributes</h3>
+                    </div>
+                    <div id="attribute-panel" class="flex-1 overflow-y-auto p-4 space-y-6">
+                        <div class="text-sm text-[#555] italic text-center mt-10">No attributes to display</div>
+                    </div>
+                    <div class="p-4 border-t border-[#1f1f1f] bg-black">
+                        <div class="text-[10px] font-mono text-[#555] mb-2">Code Snippet</div>
+                        <div id="code-preview" class="p-2 bg-black rounded border border-[#1f1f1f] text-[10px] font-mono text-emerald-500 overflow-x-auto whitespace-nowrap">
+                            // Select a component
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const components = {
+            button: {
+                name: 'Button',
+                tag: '@radix-ui/react-button',
+                props: {
+                    variant: { type: 'select', options: ['primary', 'secondary', 'ghost', 'outline'], default: 'primary' },
+                    size: { type: 'select', options: ['sm', 'md', 'lg'], default: 'md' },
+                    label: { type: 'text', default: 'Click Me' },
+                    disabled: { type: 'boolean', default: false }
+                },
+                render: (props) => {
+                    const variantClass = props.variant === 'primary' ? 'ib-button-primary' : 'ib-button-secondary';
+                    const sizeClass = {
+                        sm: 'px-3 py-1 text-xs',
+                        md: 'px-4 py-2 text-sm',
+                        lg: 'px-6 py-3 text-base'
+                    }[props.size];
+                    
+                    return `<button class="ib-button ${variantClass} ${sizeClass} ${props.disabled ? 'opacity-50 cursor-not-allowed' : ''}" ${props.disabled ? 'disabled' : ''}>${props.label}</button>`;
+                }
+            },
+            input: {
+                name: 'Input Field',
+                tag: '@radix-ui/react-textfield',
+                props: {
+                    placeholder: { type: 'text', default: 'Enter text...' },
+                    type: { type: 'select', options: ['text', 'password', 'email'], default: 'text' },
+                    disabled: { type: 'boolean', default: false }
+                },
+                render: (props) => {
+                    return `<input type="${props.type}" placeholder="${props.placeholder}" class="ib-input px-3 py-2 rounded-md w-64 ${props.disabled ? 'opacity-50 cursor-not-allowed' : ''}" ${props.disabled ? 'disabled' : ''}>`;
+                }
+            },
+            modal: {
+                name: 'Modal Dialog',
+                tag: '@radix-ui/react-dialog',
+                props: {
+                    title: { type: 'text', default: 'Modal Title' },
+                    content: { type: 'text', default: 'This is a modal content area.' },
+                    size: { type: 'select', options: ['sm', 'md', 'lg'], default: 'md' }
+                },
+                render: (props) => {
+                    const sizeClass = {
+                        sm: 'w-64',
+                        md: 'w-96',
+                        lg: 'w-[500px]'
+                    }[props.size];
+                    return `<div class="glass p-6 rounded-xl shadow-2xl ${sizeClass} text-center">
+                                <h4 class="font-bold mb-2">${props.title}</h4>
+                                <p class="text-sm text-[#a1a1aa] mb-4">${props.content}</p>
+                                <button class="ib-button ib-button-primary px-4 py-1 rounded text-xs">Close</button>
+                            </div>`;
+                }
+            },
+            badge: {
+                name: 'Badge',
+                tag: '@radix-ui/react-badge',
+                props: {
+                    text: { type: 'text', default: 'New' },
+                    color: { type: 'select', options: ['emerald', 'red', 'blue', 'amber'], default: 'emerald' }
+                },
+                render: (props) => {
+                    const colorClass = {
+                        emerald: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
+                        red: 'bg-red-500/10 text-red-500 border-red-500/20',
+                        blue: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
+                        amber: 'bg-amber-500/10 text-amber-500 border-amber-500/20'
+                    }[props.color];
+                    return `<span class="px-2 py-0.5 rounded-full border text-[10px] font-bold ${colorClass}">${props.text}</span>`;
+                }
+            },
+            switch: {
+                name: 'Switch',
+                tag: '@radix-ui/react-switch',
+                props: {
+                    label: { type: 'text', default: 'Enable Notifications' },
+                    checked: { type: 'boolean', default: true }
+                },
+                render: (props) => {
+                    return `<div class="ib-switch-container">
+                                <div class="ib-switch ${props.checked ? 'active' : ''}" onclick="this.classList.toggle('active')">
+                                    <div class="ib-switch-thumb"></div>
+                                </div>
+                                <span class="text-sm text-secondary">${props.label}</span>
+                            </div>`;
+                }
+            },
+            tabs: {
+                name: 'Tabs',
+                tag: '@radix-ui/react-tabs',
+                props: {
+                    activeTab: { type: 'select', options: ['Account', 'Security', 'Billing'], default: 'Account' },
+                    content: { type: 'text', default: 'This is the tab content area.' }
+                },
+                render: (props) => {
+                    const tabs = ['Account', 'Security', 'Billing'];
+                    const triggerHtml = tabs.map(t => 
+                        `<div class="ib-tab-trigger ${t === props.activeTab ? 'active' : ''}">${t}</div>`
+                    ).join('');
+                    
+                    return `<div class="w-full max-w-md">
+                                <div class="ib-tabs-list">${triggerHtml}</div>
+                                <div class="ib-tab-content">${props.content}</div>
+                            </div>`;
+                }
+            },
+            accordion: {
+                name: 'Accordion',
+                tag: '@radix-ui/react-accordion',
+                props: {
+                    title: { type: 'text', default: 'What is InkBuddy?' },
+                    content: { type: 'text', default: 'InkBuddy is a design system CLI that scaffolds React components from tokens.' },
+                    expanded: { type: 'boolean', default: true }
+                },
+                render: (props) => {
+                    return `<div class="ib-accordion-item w-full max-w-md">
+                                <div class="ib-accordion-trigger">
+                                    ${props.title}
+                                    <i class="fas fa-chevron-down text-[10px] ${props.expanded ? 'rotate-180' : ''} transition-transform"></i>
+                                </div>
+                                ${props.expanded ? `<div class="ib-accordion-content">${props.content}</div>` : ''}
+                            </div>`;
+                }
+            }
+        };
+
+
+        let activeComponent = null;
+        let currentProps = {};
+
+        function init() {
+            const list = document.getElementById('component-list');
+            Object.entries(components).forEach(([id, comp]) => {
+                const item = document.createElement('div');
+                item.className = 'sidebar-item p-3 text-sm text-[#a1a1aa] hover:text-white rounded-md mb-1 flex items-center gap-3';
+                item.innerHTML = `<i class="fas fa-cube text-[10px] opacity-50"></i> ${comp.name}`;
+                item.onclick = () => selectComponent(id);
+                item.setAttribute('data-id', id);
+                list.appendChild(item);
+            });
+        }
+
+        function selectComponent(id) {
+            activeComponent = id;
+            const comp = components[id];
+            currentProps = {};
+            
+            // Set defaults
+            Object.entries(comp.props).forEach(([key, config]) => {
+                currentProps[key] = config.default;
+            });
+
+            // Update UI
+            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+            document.querySelector(`[data-id="${id}"]`).classList.add('active');
+            document.getElementById('active-component-name').innerText = comp.name;
+            document.getElementById('component-tag').innerText = comp.tag;
+
+            renderAttributes();
+            updatePreview();
+        }
+
+        function renderAttributes() {
+            const panel = document.getElementById('attribute-panel');
+            panel.innerHTML = '';
+
+            const comp = components[activeComponent];
+            Object.entries(comp.props).forEach(([key, config]) => {
+                const group = document.createElement('div');
+                group.className = 'flex flex-col gap-2';
+                
+                const label = document.createElement('label');
+                label.className = 'text-[11px] font-mono text-[#555] uppercase';
+                label.innerText = key;
+
+                let input;
+                if (config.type === 'select') {
+                    input = document.createElement('select');
+                    input.className = 'prop-input p-2 rounded';
+                    config.options.forEach(opt => {
+                        const o = document.createElement('option');
+                        o.value = opt;
+                        o.text = opt;
+                        if (opt === currentProps[key]) o.selected = true;
+                        input.appendChild(o);
+                    });
+                } else if (config.type === 'boolean') {
+                    input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.className = 'w-4 h-4 accent-emerald-500';
+                    input.checked = currentProps[key];
+                } else {
+                    input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'prop-input p-2 rounded';
+                    input.value = currentProps[key];
+                }
+
+                input.onchange = (e) => {
+                    currentProps[key] = config.type === 'boolean' ? e.target.checked : e.target.value;
+                    updatePreview();
+                };
+
+                group.appendChild(label);
+                group.appendChild(input);
+                panel.appendChild(group);
+            });
+        }
+
+        function updatePreview() {
+            const comp = components[activeComponent];
+            const renderArea = document.getElementById('component-render-area');
+            renderArea.innerHTML = comp.render(currentProps);
+            
+            // Update Code snippet
+            const code = document.getElementById('code-preview');
+            const propString = Object.entries(currentProps)
+                .map(([k, v]) => `${k}={${JSON.stringify(v)}}`)
+                .join(' ');
+            code.innerText = `<${comp.name} ${propString} />`;
+        }
+
+        function toggleTheme() {
+            const canvas = document.getElementById('preview-canvas');
+            canvas.style.backgroundColor = canvas.style.backgroundColor === 'rgb(255, 255, 255)' ? '#080808' : '#ffffff';
+            if (canvas.style.backgroundColor === 'rgb(255, 255, 255)') {
+                canvas.style.color = '#000';
+            } else {
+                canvas.style.color = '#fff';
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

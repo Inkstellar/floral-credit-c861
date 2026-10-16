@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>InkBuddy – Native macOS AI Companion at Your Cursor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+  :root {
+    --bg: #09090d;
+    --bg-card: #12121a;
+    --bg-card-hover: #181824;
+    --bg-subtle: rgba(255, 255, 255, 0.07);
+    --border: rgba(255, 255, 255, 0.1);
+    --border-accent: rgba(74, 222, 128, 0.4);
+    --text: #f3f3f8;
+    --text-muted: #9494a8;
+    --accent: #4ade80;
+    --accent-glow: rgba(74, 222, 128, 0.18);
+    --radius: 14px;
+    --radius-sm: 8px;
+    --font-base: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', 'Roboto Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-base);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    cursor: none !important;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { opacity: 0.9; }
+  
+  .container { max-width: 1040px; margin: 0 auto; padding: 0 1.5rem; }
+  .section { padding: 5rem 0; }
+
+  /* Navigation Header */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.3px;
+  }
+  .nav-brand-icon {
+    width: 28px; height: 28px;
+    background: var(--accent-glow);
+    border: 1px solid var(--border-accent);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  .nav-links {
+    display: flex;
+    gap: 1.75rem;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .nav-links a { color: var(--text-muted); transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* Hero Section */
+  .hero-section {
+    padding: 4.5rem 0 3rem;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3.5rem;
+    align-items: center;
+  }
+
+  @media (max-width: 900px) {
+    .hero-section {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      padding: 3rem 0;
+    }
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 100px;
+    background: var(--accent-glow);
+    border: 1px solid var(--border-accent);
+    font-size: 0.82rem;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+  .hero-tag .pulse-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  .hero-title {
+    font-size: 3.1rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1.2px;
+    margin-bottom: 1.25rem;
+    background: linear-gradient(180deg, #ffffff 40%, #a0a0b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (max-width: 600px) {
+    .hero-title { font-size: 2.3rem; }
+  }
+
+  .hero-description {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 2rem;
+    max-width: 520px;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1.6rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #050508;
+    box-shadow: 0 4px 20px rgba(74, 222, 128, 0.25);
+  }
+  .btn-primary:hover {
+    background: #5eead4;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(74, 222, 128, 0.35);
+  }
+  .btn-secondary {
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover {
+    border-color: var(--text-muted);
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+  }
+
+  .hotkey-badge {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  /* macOS HUD Demo Card */
+  .hud-demo-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+    position: relative;
+  }
+  .hud-demo-header {
+    background: #0d0d14;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .mac-controls {
+    display: flex;
+    gap: 6px;
+  }
+  .mac-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .mac-dot.close { background: #ff5f56; }
+  .mac-dot.min { background: #ffbd2e; }
+  .mac-dot.max { background: #27c93f; }
+
+  .hud-demo-title {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .hud-demo-body {
+    padding: 1.5rem;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: radial-gradient(circle at top right, rgba(74, 222, 128, 0.05), transparent 70%);
+  }
+
+  .hud-prompt-box {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.85rem 1rem;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .hud-state-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+
+  .hud-response-stream {
+    font-size: 0.92rem;
+    color: var(--text);
+    line-height: 1.6;
+    background: rgba(0,0,0,0.3);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    border-left: 2px solid var(--accent);
+    min-height: 110px;
+  }
+  .typing-cursor {
+    display: inline-block;
+    width: 7px; height: 15px;
+    background: var(--accent);
+    vertical-align: middle;
+    margin-left: 2px;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  .hud-footer-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Features Grid */
+  .section-title-wrap {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    transition: all 0.25s ease;
+  }
+  .feature-card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  }
+  .feature-icon {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    background: var(--accent-glow);
+    border: 1px solid var(--border-accent);
+    color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+  .feature-icon i {
+    width: 20px;
+    height: 20px;
+  }
+  .feature-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.6rem; }
+  .feature-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* Steps Section */
+  .steps-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  .step-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    position: relative;
+  }
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+  .step-card h4 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+  .step-card p { font-size: 0.88rem; color: var(--text-muted); }
+
+  /* Metrics Bar */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+  }
+  .metric-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    text-align: center;
+  }
+  .metric-value {
+    font-family: var(--font-mono);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+  .metric-desc { font-size: 0.85rem; color: var(--text-muted); }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+  }
+
+  /* ===== Animated Cursor + HUD Demo Widget ===== */
+  .cursor-hud-widget {
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+    pointer-events: none;
+    font-family: var(--font-mono);
+  }
+  .cursor-pointer {
+    width: 22px;
+    height: 22px;
+    background: var(--accent);
+    border-radius: 4px;
+    transform: rotate(-45deg);
+    box-shadow: 0 0 12px rgba(74, 222, 128, 0.6);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+  }
+  .cursor-pointer::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    opacity: 0;
+    animation: ripple 2s infinite;
+  }
+  @keyframes ripple {
+    0% { transform: scale(0.5); opacity: 0.6; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  .hud-bubble {
+    background: rgba(18, 18, 26, 0.92);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-accent);
+    border-radius: 10px;
+    padding: 0.85rem 1.1rem;
+    max-width: 320px;
+    min-width: 240px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--text);
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+  }
+  .hud-bubble.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .hud-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -7px;
+    right: 18px;
+    width: 14px; height: 14px;
+    background: rgba(18, 18, 26, 0.92);
+    border-right: 1px solid var(--border-accent);
+    border-bottom: 1px solid var(--border-accent);
+    transform: rotate(45deg);
+  }
+  .hud-bubble .stream-label {
+    font-size: 0.7rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .hud-bubble .stream-label .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 1.5s infinite;
+  }
+  .hud-bubble .stream-text {
+    color: var(--text);
+  }
+  .hud-bubble .stream-text .blink {
+    display: inline-block;
+    width: 6px; height: 13px;
+    background: var(--accent);
+    vertical-align: middle;
+    margin-left: 1px;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  .hud-bubble .context-line {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+  }
+  .hud-bubble .context-line span:last-child { color: var(--accent); }
+
+  /* Hide on mobile */
+  @media (max-width: 900px) {
+    .cursor-hud-widget { display: none; }
+    .hero-bg-cursor { display: none; }
+  }
+
+  .hero-bg-cursor {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.9;
+    perspective: 1000px;
+  }
+  .hero-section { position: relative; overflow: hidden; }
+
+  /* 3D Pyramid Structure */
+  .pyramid-wrapper {
+    position: absolute;
+    left: 50%;
+    top: 48%;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+    cursor: pointer;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: floatTriangle 6.5s ease-in-out infinite;
+    z-index: 2;
+  }
+  .pyramid {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    transform-style: preserve-3d;
+    transform: rotateX(22deg) rotateZ(-6deg);
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .pyramid-wrapper:hover .pyramid {
+    transform: rotateX(-22deg) rotateZ(6deg);
+  }
+  .pyramid .face {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 100px solid transparent;
+    border-right: 100px solid transparent;
+    border-bottom: 170px solid rgba(74, 222, 128, 0.15);
+    transform-origin: 50% 100%;
+    filter: drop-shadow(0 0 15px rgba(74, 222, 128, 0.3));
+    transition: border-bottom-color 0.3s ease;
+    backface-visibility: visible;
+  }
+  /* Correct Geometric Calculation: 
+     1. rotateY moves the face to the correct side of the pyramid
+     2. translateZ(100px) pushes the face to the edge of the 200px base
+     3. rotateX(36deg) tilts the face inward so the apex meets at the center 
+        (sin(36deg) * 170px approx 100px) */
+  .pyramid .face-1 { transform: rotateY(0deg) translateZ(100px) rotateX(36deg); }
+  .pyramid .face-2 { transform: rotateY(90deg) translateZ(100px) rotateX(36deg); }
+  .pyramid .face-3 { transform: rotateY(180deg) translateZ(100px) rotateX(36deg); }
+  .pyramid .face-4 { transform: rotateY(270deg) translateZ(100px) rotateX(36deg); }
+
+  .pyramid-wrapper:hover .face {
+    border-bottom-color: rgba(74, 222, 128, 0.3);
+  }
+  .triangle-glow {
+    position: absolute;
+    left: 30%;
+    top: 48%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(74, 222, 128, 0.25) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    filter: blur(50px);
+    z-index: -1;
+    animation: pulseGlow 4s ease-in-out infinite;
+  }
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.2); }
+  }
+  @keyframes floatTriangle {
+    0%, 100% { transform: translate(-50%, -50%) rotateX(22deg) rotateZ(-6deg) translateY(0); }
+    50%     { transform: translate(-50%, -50%) rotateX(22deg) rotateZ(-6deg) translateY(-14px); }
+  }
+  .cursor-meta {
+    position: fixed;
+    left: 0;
+    top: 0;
+    transform: translate(0, 0);
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  .cursor-meta.active { opacity: 0.95; }
+  .ellipsis {
+    display: flex; gap: 4px;
+  }
+  .ellipsis span {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.7;
+    animation: ellipsisPop 1.2s infinite;
+  }
+  .ellipsis span:nth-child(2) { animation-delay: 0.15s; }
+  .ellipsis span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes ellipsisPop {
+    0%, 80%, 100% { transform: scale(0.8); opacity: 0.4; }
+    40% { transform: scale(1.2); opacity: 1; }
+  }
+  .audio-wave {
+    display: flex; align-items: center; gap: 3px; height: 18px;
+  }
+  .audio-wave span {
+    width: 3px;
+    background: linear-gradient(180deg, var(--accent), rgba(74,222,128,0.3));
+    border-radius: 2px;
+    opacity: 0.8;
+    animation: wave 0.9s ease-in-out infinite;
+  }
+  .audio-wave span:nth-child(1) { height: 8px; animation-delay: 0s; }
+  .audio-wave span:nth-child(2) { height: 12px; animation-delay: 0.12s; }
+  .audio-wave span:nth-child(3) { height: 16px; animation-delay: 0.24s; }
+  .audio-wave span:nth-child(4) { height: 10px; animation-delay: 0.36s; }
+  .audio-wave span:nth-child(5) { height: 6px; animation-delay: 0.48s; }
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.6); opacity: 0.5; }
+    50% { transform: scaleY(1.4); opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Navigation Header -->
+    <nav>
+      <div class="nav-brand">
+        <div class="nav-brand-icon">IB</div>
+        <span>InkBuddy</span>
+      </div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">Architecture</a>
+        <a href="#metrics">Specs</a>
+        <a href="https://github.com/Inkstellar/InkBuddy" target="_blank" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 700; color: #062c1b;" aria-label="Get InkBuddy source code from GitHub">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" style="margin-right: 6px; vertical-align: middle;"><path d="M94,7399 C99.523,7399 104,7403.59 104,7409.253 C104,7413.782 101.138,7417.624 97.167,7418.981 C96.66,7419.082 96.48,7418.762 96.48,7418.489 C96.48,7418.151 96.492,7417.047 96.492,7415.675 C96.492,7414.719 96.172,7414.095 95.813,7413.777 C98.04,7413.523 100.38,7412.656 100.38,7408.718 C100.38,7407.598 99.992,7406.684 99.35,7405.966 C99.454,7405.707 99.797,7404.664 99.252,7403.252 C99.252,7403.252 98.414,7402.977 96.505,7404.303 C95.706,7404.076 94.85,7403.962 94,7403.958 C93.15,7403.962 92.295,7404.076 91.497,7404.303 C89.586,7402.977 88.746,7403.252 88.746,7403.252 C88.203,7404.664 88.546,7405.707 88.649,7405.966 C88.01,7406.684 87.619,7407.598 87.619,7408.718 C87.619,7412.646 89.954,7413.526 92.175,7413.785 C91.889,7414.041 91.63,7414.493 91.54,7415.156 C90.97,7415.418 89.522,7415.871 88.63,7414.304 C88.63,7414.304 88.101,7413.319 87.097,7413.247 C87.097,7413.247 86.122,7413.234 87.029,7413.87 C87.029,7413.87 87.684,7414.185 88.139,7415.37 C88.139,7415.37 88.726,7417.2 91.508,7416.58 C91.513,7417.437 91.522,7418.245 91.522,7418.489 C91.522,7418.76 91.338,7419.077 90.839,7418.982 C86.865,7417.627 84,7413.783 84,7409.253 C84,7403.59 88.478,7399 94,7399" transform="translate(-84, -7399)"></path></svg> Get Source
+        </a>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-bg-cursor">
+        <div class="triangle-glow"></div>
+        <div class="pyramid-wrapper">
+          <div class="pyramid">
+            <div class="face face-1"></div>
+            <div class="face face-2"></div>
+            <div class="face face-3"></div>
+            <div class="face face-4"></div>
+          </div>
+        </div>
+        <div class="cursor-meta" id="heroCursorMeta">
+          <div class="ellipsis" id="heroEllipsis">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="audio-wave" id="heroAudioWave">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-tag">
+          <span class="pulse-dot"></span>
+          <span>macOS 14+ Native Assistant</span>
+        </div>
+
+        <h1 class="hero-title">AI that lives at your cursor.</h1>
+
+        <p class="hero-description">
+          Hold <span class="hotkey-badge">⌃⌥</span> to speak, release to capture screen context, and watch answers stream in token-by-token right where you're looking. Zero focus stealing.
+        </p>
+
+        <div class="hero-actions">
+          <a href="https://github.com/Inkstellar/InkBuddy" target="_blank" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" style="margin-right: 8px; vertical-align: middle;"><path d="M94,7399 C99.523,7399 104,7403.59 104,7409.253 C104,7413.782 101.138,7417.624 97.167,7418.981 C96.66,7419.082 96.48,7418.762 96.48,7418.489 C96.48,7418.151 96.492,7417.047 96.492,7415.675 C96.492,7414.719 96.172,7414.095 95.813,7413.777 C98.04,7413.523 100.38,7412.656 100.38,7408.718 C100.38,7407.598 99.992,7406.684 99.35,7405.966 C99.454,7405.707 99.797,7404.664 99.252,7403.252 C99.252,7403.252 98.414,7402.977 96.505,7404.303 C95.706,7404.076 94.85,7403.962 94,7403.958 C93.15,7403.962 92.295,7404.076 91.497,7404.303 C89.586,7402.977 88.746,7403.252 88.746,7403.252 C88.203,7404.664 88.546,7405.707 88.649,7405.966 C88.01,7406.684 87.619,7407.598 87.619,7408.718 C87.619,7412.646 89.954,7413.526 92.175,7413.785 C91.889,7414.041 91.63,7414.493 91.54,7415.156 C90.97,7415.418 89.522,7415.871 88.63,7414.304 C88.63,7414.304 88.101,7413.319 87.097,7413.247 C87.097,7413.247 86.122,7413.234 87.029,7413.87 C87.029,7413.87 87.684,7414.185 88.139,7415.37 C88.139,7415.37 88.726,7417.2 91.508,7416.58 C91.513,7417.437 91.522,7418.245 91.522,7418.489 C91.522,7418.76 91.338,7419.077 90.839,7418.982 C86.865,7417.627 84,7413.783 84,7409.253 C84,7403.59 88.478,7399 94,7399" transform="translate(-84, -7399)"></path></svg> Get Source Code
+          </a>
+          <button class="btn btn-secondary" onclick="scrollToSection('features')">
+            Explore Features
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Simulated HUD Card -->
+      <div class="hud-demo-card">
+        <div class="hud-demo-header">
+          <div class="mac-controls">
+            <div class="mac-dot close"></div>
+            <div class="mac-dot min"></div>
+            <div class="mac-dot max"></div>
+          </div>
+          <div class="hud-demo-title">InkBuddy HUD Panel (Top-Center)</div>
+        </div>
+        <div class="hud-demo-body">
+          <div class="hud-prompt-box">
+            <span style="color: var(--text-muted);">Spoken question:</span>
+            <div class="hud-state-indicator">
+              <span class="pulse-dot"></span>
+              <span>SSE STREAMING</span>
+            </div>
+          </div>
+          <div style="font-size: 0.82rem; color: var(--accent); font-family: var(--font-mono); margin-bottom: 0.5rem;">
+            "What does this function parameter do?"
+          </div>
+          <div class="hud-response-stream">
+            <span>The <code style="color: var(--accent);">maxTokens</code> parameter caps the response generation length at 1024 tokens to keep responses concise and minimize latency.<span class="typing-cursor"></span></span>
+          </div>
+          <div class="hud-footer-meta">
+            <span>Context: Active Window Capture</span>
+            <span>Latency: 140ms</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    
+
+<section id="features" class="section">
+      <div class="section-title-wrap">
+        <div class="section-label">/ 01 Capability</div>
+        <h2 class="section-title">Built for developer workflow</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="mic"></i></div>
+          <h3>Push-to-Talk Hotkey</h3>
+          <p>Hold ⌃⌥ to record audio, release to capture the screen and fire off the request. No clicking or window switching needed.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="cpu"></i></div>
+          <h3>On-Device Transcription</h3>
+          <p>Speech-to-text uses Apple's native Speech framework locally. Your voice audio never leaves your machine.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="zap"></i></div>
+          <h3>Token-by-Token SSE Stream</h3>
+          <p>Responses stream token-by-token over Server-Sent Events straight into a non-activating floating HUD panel.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="database"></i></div>
+          <h3>Multi-Turn Context Cache</h3>
+          <p>Retains the last 12 conversation turns and reuses screen capture context for follow-up questions within 45 seconds.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="lock"></i></div>
+          <h3>Keychain API Key Vault</h3>
+          <p>API tokens are securely stored in the macOS Login Keychain, never written to disk logs or telemetry.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="layout"></i></div>
+          <h3>Notch & Panel HUD</h3>
+          <p>Borderless panel anchored to top-center. Tuck behind the camera notch and expand dynamically on hover.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture & Steps -->
+    <section id="how-it-works" class="section">
+      <div class="section-title-wrap">
+        <div class="section-label">/ 02 Interaction</div>
+        <h2 class="section-title">How the interaction loop works</h2>
+      </div>
+
+      <div class="steps-wrapper">
+        <div class="step-card">
+          <div class="step-num">STEP 01</div>
+          <h4>Hold Hotkey ⌃⌥</h4>
+          <p>Triggers global event monitor. Audio engine records level-metered speech locally.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">STEP 02</div>
+          <h4>Release & Capture</h4>
+          <p>On key release, takes a screen capture under 1568px and runs local transcription.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">STEP 03</div>
+          <h4>SSE Answers Stream</h4>
+          <p>Model response streams into non-activating overlay anchored at your cursor position.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Customization Section -->
+    <section id="customization" class="section">
+      <div class="section-title-wrap">
+        <div class="section-label">/ 04 Personalization</div>
+        <h2 class="section-title">Your AI, your rules</h2>
+      </div>
+ 
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="palette"></i></div>
+          <h3>Visual Customization</h3>
+          <p>Take full control of the aesthetic. From the glow and animation of your 3D cursor to the HUD panel's transparency and theme, make InkBuddy match your workspace.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="keyboard"></i></div>
+          <h3>Flexible Hotkeys</h3>
+          <p>Avoid collisions with your IDE or OS. Fully remap the recording and capture hotkeys to whatever combination fits your muscle memory best.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="key"></i></div>
+          <h3>BYO API Keys</h3>
+          <p>No locked subscriptions. Plug in your own OpenAI or OpenAI-compatible API keys (via LM Studio, Ollama, etc.) for total transparency and cost control.</p>
+        </div>
+      </div>
+    </section>
+ 
+    <!-- Specs & Metrics -->
+    <section id="metrics" class="section">
+      <div class="section-title-wrap">
+        <div class="section-label">/ 03 Specs</div>
+        <h2 class="section-title">Performance & footprint</h2>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <div class="metric-value">12 Turns</div>
+          <div class="metric-desc">Context memory history</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value">45s</div>
+          <div class="metric-desc">Screenshot cache window</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value">0 KB</div>
+          <div class="metric-desc">External audio telemetry</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value">macOS 14+</div>
+          <div class="metric-desc">Native Swift & SwiftUI</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="download" class="section" style="text-align: center; background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 4rem;">
+      <div class="section-label">/ 04 Installation</div>
+      <h2 class="section-title" style="margin-bottom: 1rem;">Ready to try InkBuddy?</h2>
+      <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 2rem;">
+        Explore the source code on GitHub and build the native macOS companion for your workflow.
+      </p>
+      <a href="https://github.com/Inkstellar/InkBuddy" target="_blank" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" style="margin-right: 8px; vertical-align: middle;"><path d="M94,7399 C99.523,7399 104,7403.59 104,7409.253 C104,7413.782 101.138,7417.624 97.167,7418.981 C96.66,7419.082 96.48,7418.762 96.48,7418.489 C96.48,7418.151 96.492,7417.047 96.492,7415.675 C96.492,7414.719 96.172,7414.095 95.813,7413.777 C98.04,7413.523 100.38,7412.656 100.38,7408.718 C100.38,7407.598 99.992,7406.684 99.35,7405.966 C99.454,7405.707 99.797,7404.664 99.252,7403.252 C99.252,7403.252 98.414,7402.977 96.505,7404.303 C95.706,7404.076 94.85,7403.962 94,7403.958 C93.15,7403.962 92.295,7404.076 91.497,7404.303 C89.586,7402.977 88.746,7403.252 88.746,7403.252 C88.203,7404.664 88.546,7405.707 88.649,7405.966 C88.01,7406.684 87.619,7407.598 87.619,7408.718 C87.619,7412.646 89.954,7413.526 92.175,7413.785 C91.889,7414.041 91.63,7414.493 91.54,7415.156 C90.97,7415.418 89.522,7415.871 88.63,7414.304 C88.63,7414.304 88.101,7413.319 87.097,7413.247 C87.097,7413.247 86.122,7413.234 87.029,7413.87 C87.029,7413.87 87.684,7414.185 88.139,7415.37 C88.139,7415.37 88.726,7417.2 91.508,7416.58 C91.513,7417.437 91.522,7418.245 91.522,7418.489 C91.522,7418.76 91.338,7419.077 90.839,7418.982 C86.865,7417.627 84,7413.783 84,7409.253 C84,7403.59 88.478,7399 94,7399" transform="translate(-84, -7399)"></path></svg> Get Source Code
+          </a>
+    </section>
+
+  </div>
+
+  <!-- Animated Cursor + HUD Demo Widget -->
+  <div class="cursor-hud-widget">
+    <div class="cursor-pointer"></div>
+    <div class="hud-bubble" id="hudBubble">
+      <div class="stream-label">
+        <span class="dot"></span>
+        <span id="streamLabel">SSE STREAMING</span>
+      </div>
+      <div class="stream-text" id="streamText">
+        <span id="streamContent">Loading context…</span><span class="blink"></span>
+      </div>
+      <div class="context-line">
+        <span id="contextLabel">Context</span>
+        <span id="contextValue">Active window</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>Built with Swift & SwiftUI for macOS 14+. © 2026 InkBuddy</p>
+      </div>
+      </footer>
+
+  <script>
+    lucide.createIcons();
+  </script>
+  <script>
+    function scrollToSection(id) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // ===== Hero Background Cursor Logic =====
+    (function() {
+      const meta = document.getElementById('heroCursorMeta');
+      const ellipsis = document.getElementById('heroEllipsis');
+      const wave = document.getElementById('heroAudioWave');
+
+      // Track mouse for meta follower
+      let mouseX = 0, mouseY = 0;
+      let metaX = 0, metaY = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        isAutoMoving = false; // Switch to manual follow on mouse move
+        if (autoMoveTimer) clearTimeout(autoMoveTimer);
+      });
+
+      function animateMeta() {
+        // Smooth lag effect for the follower
+        metaX += (mouseX - metaX) * 0.12;
+        metaY += (mouseY - metaY) * 0.12;
+        
+        if (meta) {
+          // Offset the indicator slightly to the bottom-right of the actual cursor
+          meta.style.transform = `translate(${metaX + 15}px, ${metaY + 15}px)`;
+        }
+        requestAnimationFrame(animateMeta);
+      }
+      animateMeta();
+
+      function toggleMeta() {
+        // Randomly pick: ellipsis, wave, or nothing (briefly)
+        const rand = Math.random();
+        
+        // Reset
+        meta.classList.remove('active');
+        ellipsis.style.display = 'none';
+        wave.style.display = 'none';
+
+        setTimeout(() => {
+          if (rand < 0.45) {
+            ellipsis.style.display = 'flex';
+            meta.classList.add('active');
+          } else if (rand < 0.9) {
+            wave.style.display = 'flex';
+            meta.classList.add('active');
+          }
+          
+          // Schedule next change
+          setTimeout(toggleMeta, 3000 + Math.random() * 4000);
+        }, 500);
+      }
+
+      toggleMeta();
+    })();
+
+    // ===== Animated Cursor + HUD Widget Controller =====
+    (function() {
+      const cursor = document.querySelector('.cursor-pointer');
+      const hudBubble = document.getElementById('hudBubble');
+      const streamLabelEl = document.getElementById('streamLabel');
+      const streamContentEl = document.getElementById('streamContent');
+      const contextLabelEl = document.getElementById('contextLabel');
+      const contextValueEl = document.getElementById('contextValue');
+
+      let currentSection = null;
+      let typingTimer = null;
+      let isVisible = false;
+
+      const sections = [
+        { id: 'features', label: 'FEATURES', context: 'Push-to-Talk hotkey · On-device transcription', content: "InkBuddy listens on ⌃⌥, records locally, then streams the response directly into this HUD." },
+        { id: 'how-it-works', label: 'ARCHITECTURE', context: 'Hold → Release → Capture → Stream', content: "The SSE loop keeps context for 12 turns. Each release re-uses the screenshot cache." },
+        { id: 'metrics', label: 'SPECS', context: 'macOS 14+ · Swift + SwiftUI', content: "Zero external audio telemetry. API key lives in Keychain only. 45s screenshot cache." },
+        { id: 'download', label: 'INSTALL', context: 'Lightweight DMG · No runtime deps', content: "Download InkBuddy.dmg, grant Accessibility + Screen Recording, and you're live." }
+      ];
+
+      // Mouse interaction state
+      let mouseX = 0, mouseY = 0;
+      let cursorX = 0, cursorY = 0;
+      let targetX = 0, targetY = 0;
+      let isAutoMoving = true;
+      let autoMoveTimer = null;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        isAutoMoving = false; // Switch to manual follow on mouse move
+        if (autoMoveTimer) clearTimeout(autoMoveTimer);
+      });
+
+      function pickRandomTarget() {
+        targetX = Math.random() * window.innerWidth;
+        targetY = Math.random() * window.innerHeight;
+        
+        // Random pause duration before next move
+        autoMoveTimer = setTimeout(() => {
+          pickRandomTarget();
+        }, 4000 + Math.random() * 5000);
+      }
+
+      function animateCursor() {
+        if (isAutoMoving) {
+          // Smoothly interpolate toward random target
+          cursorX += (targetX - cursorX) * 0.02;
+          cursorY += (targetY - cursorY) * 0.02;
+        } else {
+          // Smoothly follow actual mouse
+          cursorX += (mouseX - cursorX) * 0.18;
+          cursorY += (mouseY - cursorY) * 0.18;
+        }
+
+        if (cursor) {
+          cursor.style.left = cursorX + 'px';
+          cursor.style.top = cursorY + 'px';
+        }
+        requestAnimationFrame(animateCursor);
+      }
+      pickRandomTarget();
+      animateCursor();
+
+      // Hover detection
+      const observerOptions = {
+        root: null,
+        threshold: 0.15
+      };
+
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.15) {
+            const section = entry.target;
+            if (section.id !== currentSection) {
+              currentSection = section.id;
+              const matched = sections.find(s => s.id === currentSection);
+              if (matched) {
+                // Update HUD content
+                streamLabelEl.textContent = matched.label;
+                contextLabelEl.textContent = 'Context';
+                contextValueEl.textContent = matched.context;
+
+                // Trigger simulated typing animation on HUD bubble
+                streamContentEl.textContent = '';
+                showTypingAnimation(matched.content);
+
+                // Show HUD bubble
+                if (!isVisible) {
+                  hudBubble.classList.add('show');
+                  cursor.classList.add('active');
+                  isVisible = true;
+                }
+              }
+            }
+          }
+        });
+      }, observerOptions);
+
+      sections.forEach(s => {
+        const el = document.getElementById(s.id);
+        if (el) sectionObserver.observe(el);
+      });
+
+      function showTypingAnimation(text) {
+        // Simulated token-by-token streaming
+        const chars = text.split('');
+        let i = 0;
+
+        function streamNext() {
+          if (i < chars.length) {
+            streamContentEl.textContent += chars[i];
+            i++;
+            typingTimer = setTimeout(streamNext, 25 + Math.random() * 20);
+          } else {
+            // Pause, then reset cursor to idle state
+            typingTimer = setTimeout(() => {
+              streamContentEl.innerHTML = text + '<span class="blink"></span>';
+            }, 500);
+          }
+        }
+        streamNext();
+      }
+
+      // Hide HUD when mouse leaves viewport area
+      document.addEventListener('mouseleave', () => {
+        if (isVisible) {
+          hudBubble.classList.remove('show');
+          cursor.classList.remove('active');
+          isVisible = false;
+          if (typingTimer) clearTimeout(typingTimer);
+        }
+      });
+
+      // Re-show when mouse enters again (if near a section)
+      document.addEventListener('mouseenter', () => {
+        if (currentSection && !isVisible) {
+          hudBubble.classList.add('show');
+          cursor.classList.add('active');
+          isVisible = true;
+        }
+      });
+
+      // Initial state — start animation after page load
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          hudBubble.classList.add('show');
+          cursor.classList.add('active');
+          isVisible = true;
+          streamLabelEl.textContent = 'READY';
+          streamContentEl.textContent = 'Hover over a section to see context…';
+          contextLabelEl.textContent = 'Cursor';
+          contextValueEl.textContent = 'Top-right HUD position';
+        }, 600);
+      });
+    })();
+  </script>
+</body>
+</html>

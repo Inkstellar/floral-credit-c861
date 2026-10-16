@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+window.onerror=function(msg,src,line,col,err){window.parent.postMessage({type:'app-error',message:msg,source:src,lineno:line,colno:col,stack:err&&err.stack||''},'*');};
+window.onunhandledrejection=function(e){window.parent.postMessage({type:'app-error',message:'Unhandled promise rejection: '+(e.reason&&e.reason.message||e.reason||'unknown'),stack:e.reason&&e.reason.stack||''},'*');};
+window.addEventListener('error',function(e){var t=e&&e.target;if(t&&t!==window&&t.tagName==='SCRIPT'){var u=t.src||'';window.parent.postMessage({type:'app-error',message:'Failed to load script'+(u?': '+u:' (inline module)'),source:u},'*');}},true);
+(function(){var _f=window.fetch;window.fetch=function(){var a=arguments,u=typeof a[0]==='string'?a[0]:(a[0]&&a[0].url)||'';var p=_f.apply(this,a);p.then(function(r){if(r.status===500){r.clone().text().then(function(b){window.parent.postMessage({type:'fetch-error',url:u,status:500,body:b},'*');}).catch(function(){window.parent.postMessage({type:'fetch-error',url:u,status:500,body:''},'*');});}}).catch(function(e){window.parent.postMessage({type:'fetch-error',url:u,status:0,body:e.message||'fetch failed'},'*');});return p;};})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InkBuddy Studio — Component Explorer</title>
+<meta name="theme-color" content="#09090b">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<script src="https://builder.puter.com/runtime.js" defer></script>
+<script src="https://js.puter.com/v2/"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="css/app.css">
+<style>
+  body { overflow: hidden; }
+  .side-item { display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 10px; border-radius: 7px; font-size: 13px; color: var(--muted); transition: background .12s, color .12s; width: 100%; text-align: left; }
+  .side-item:hover { background: #141418; color: var(--text); }
+  .side-item.on { background: #1a1a1f; color: var(--text); }
+  .side-item svg { width: 15px; height: 15px; opacity: .8; }
+  .tab-btn { height: 40px; padding: 0 2px; font-size: 13px; color: var(--muted); border-bottom: 1.5px solid transparent; margin-bottom: -1px; transition: color .15s; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.on { color: var(--text); border-color: var(--text); }
+  #canvas { transition: background-color .2s; }
+  #canvas.light { background-color: #f7f7f8; }
+  #frame { transition: width .25s ease; }
+  pre.code { font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; tab-size: 2; }
+  .swatch { width: 26px; height: 26px; border-radius: 7px; cursor: pointer; outline-offset: 2px; transition: transform .1s; }
+  .swatch:hover { transform: scale(1.08); }
+  .swatch.on { outline: 2px solid var(--text); }
+  .theme-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; transition: border-color .15s; }
+  .theme-row:hover { border-color: var(--border-strong); }
+  .theme-row.on { border-color: var(--accent); }
+  @media (max-width: 1023px) {
+    #sidebar { position: fixed; top: 52px; bottom: 0; left: 0; z-index: 40; transform: translateX(-100%); transition: transform .2s; }
+    #sidebar.open { transform: none; }
+    #inspector { position: fixed; top: 52px; bottom: 0; right: 0; z-index: 40; transform: translateX(100%); transition: transform .2s; }
+    #inspector.open { transform: none; }
+  }
+</style>
+    <!-- puter-pwa: generated, do not edit -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon-180.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="InkBuddy">
+    <!-- /puter-pwa -->
+</head>
+<body class="h-screen flex flex-col">
+
+<header class="h-[52px] shrink-0 border-b border-[#1c1c20] flex items-center justify-between px-3 sm:px-4 bg-[#09090b] z-50">
+  <div class="flex items-center gap-2">
+    <button class="icon-btn lg:hidden" id="toggle-side" aria-label="Components"><i data-lucide="panel-left"></i></button>
+    <a href="index.html" class="flex items-center gap-2.5">
+      <img src="icon.svg" alt="" class="w-6 h-6">
+      <span class="text-sm font-semibold tracking-tight">InkBuddy <span class="text-[#63636b] font-normal">Studio</span></span>
+    </a>
+  </div>
+  <div class="flex items-center gap-1.5">
+    <a href="index.html" class="btn btn-ghost h-8 text-[12px] hidden sm:inline-flex border-transparent"><i data-lucide="arrow-left"></i>Docs</a>
+    <div id="auth-area" class="flex items-center"></div>
+    <button class="icon-btn lg:hidden" id="toggle-insp" aria-label="Inspector"><i data-lucide="sliders-horizontal"></i></button>
+  </div>
+</header>
+
+<div class="flex-1 flex overflow-hidden relative">
+  <!-- Sidebar -->
+  <aside id="sidebar" class="w-[240px] shrink-0 border-r border-[#1c1c20] bg-[#09090b] flex flex-col">
+    <div class="p-3">
+      <div class="relative">
+        <i data-lucide="search" class="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-[#63636b]"></i>
+        <input id="search" class="field pl-8 pr-10" placeholder="Search components">
+        <span class="mono text-[10px] text-[#63636b] absolute right-2 top-1/2 -translate-y-1/2 border border-[#26262b] rounded px-1">/</span>
+      </div>
+    </div>
+    <nav id="comp-list" class="flex-1 overflow-y-auto px-2 pb-4"></nav>
+    <div class="p-3 border-t border-[#1c1c20] text-[11px] text-[#63636b] flex items-center justify-between">
+      <span id="comp-count"></span><span class="mono">v2.0.0</span>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 flex flex-col min-w-0">
+    <div class="h-12 shrink-0 border-b border-[#1c1c20] flex items-center justify-between px-4 gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <h1 id="comp-name" class="text-sm font-semibold truncate"></h1>
+        <span id="comp-pkg" class="mono text-[11px] px-2 py-0.5 rounded border border-[#26262b] text-[#a1a1aa] truncate hidden sm:inline"></span>
+      </div>
+      <div class="flex items-center gap-1 shrink-0">
+        <div class="hidden md:flex items-center gap-0.5 mr-1" id="viewport">
+          <button class="icon-btn on" data-w="100%" title="Desktop"><i data-lucide="monitor"></i></button>
+          <button class="icon-btn" data-w="640px" title="Tablet"><i data-lucide="tablet"></i></button>
+          <button class="icon-btn" data-w="380px" title="Mobile"><i data-lucide="smartphone"></i></button>
+        </div>
+        <div class="w-px h-5 bg-[#1c1c20] mx-1 hidden md:block"></div>
+        <button class="icon-btn" id="bg-toggle" title="Toggle canvas background"><i data-lucide="sun"></i></button>
+        <button class="icon-btn" id="reset-props" title="Reset props"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+
+    <div class="flex-1 min-h-0 p-3 sm:p-4 flex flex-col gap-3 overflow-hidden">
+      <div id="canvas" class="dot-grid flex-1 min-h-[220px] rounded-xl border border-[#1c1c20] bg-[#0c0c0e] flex items-center justify-center overflow-auto p-6">
+        <div id="frame" class="w-full h-full flex items-center justify-center">
+          <div id="render" class="ib-root flex items-center justify-center w-full"></div>
+        </div>
+      </div>
+
+      <div class="shrink-0 rounded-xl border border-[#1c1c20] bg-[#0c0c0e] flex flex-col overflow-hidden" id="code-panel">
+        <div class="flex items-center justify-between px-4 border-b border-[#1c1c20]">
+          <div class="flex gap-5" id="code-tabs">
+            <button class="tab-btn on" data-t="usage">Usage</button>
+            <button class="tab-btn" data-t="source">Source</button>
+            <button class="tab-btn" data-t="cli">CLI</button>
+          </div>
+          <div class="flex items-center gap-1">
+            <button class="icon-btn w-7 h-7" id="copy-code" title="Copy"><i data-lucide="copy"></i></button>
+            <button class="icon-btn w-7 h-7" id="collapse-code" title="Collapse"><i data-lucide="chevron-down"></i></button>
+          </div>
+        </div>
+        <pre class="code p-4 overflow-auto max-h-[220px] h-[180px]" id="code"></pre>
+      </div>
+    </div>
+  </main>
+
+  <!-- Inspector -->
+  <aside id="inspector" class="w-[300px] shrink-0 border-l border-[#1c1c20] bg-[#09090b] flex flex-col">
+    <div class="flex gap-5 px-4 border-b border-[#1c1c20]" id="insp-tabs">
+      <button class="tab-btn on" data-t="props">Props</button>
+      <button class="tab-btn" data-t="theme">Theme</button>
+    </div>
+    <div id="panel-props" class="flex-1 overflow-y-auto p-4 space-y-5"></div>
+    <div id="panel-theme" class="flex-1 overflow-y-auto p-4 space-y-6 hidden"></div>
+  </aside>
+  <div id="scrim" class="fixed inset-0 top-[52px] bg-black/50 z-30 hidden lg:hidden"></div>
+</div>
+
+<div class="toast" id="toast"><i data-lucide="check"></i><span></span></div>
+
+<script type="module" src="js/studio.js"></script>
+</body>
+</html>

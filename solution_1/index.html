@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+window.onerror=function(msg,src,line,col,err){window.parent.postMessage({type:'app-error',message:msg,source:src,lineno:line,colno:col,stack:err&&err.stack||''},'*');};
+window.onunhandledrejection=function(e){window.parent.postMessage({type:'app-error',message:'Unhandled promise rejection: '+(e.reason&&e.reason.message||e.reason||'unknown'),stack:e.reason&&e.reason.stack||''},'*');};
+window.addEventListener('error',function(e){var t=e&&e.target;if(t&&t!==window&&t.tagName==='SCRIPT'){var u=t.src||'';window.parent.postMessage({type:'app-error',message:'Failed to load script'+(u?': '+u:' (inline module)'),source:u},'*');}},true);
+(function(){var _f=window.fetch;window.fetch=function(){var a=arguments,u=typeof a[0]==='string'?a[0]:(a[0]&&a[0].url)||'';var p=_f.apply(this,a);p.then(function(r){if(r.status===500){r.clone().text().then(function(b){window.parent.postMessage({type:'fetch-error',url:u,status:500,body:b},'*');}).catch(function(){window.parent.postMessage({type:'fetch-error',url:u,status:500,body:''},'*');});}}).catch(function(e){window.parent.postMessage({type:'fetch-error',url:u,status:0,body:e.message||'fetch failed'},'*');});return p;};})();
+</script>
+<script src="https://builder.puter.com/runtime.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InkBuddy — Design tokens to React, in one command</title>
+<meta name="description" content="InkBuddy CLI scaffolds accessible, token-driven React components built on Radix UI — with an MCP server for AI agents.">
+<meta name="theme-color" content="#09090b">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="css/app.css">
+<style>
+  #flow { position: relative; height: 520px; overflow: hidden; touch-action: none; cursor: grab; }
+  #flow.panning { cursor: grabbing; }
+  #flow-layer { position: absolute; inset: 0; transform-origin: 0 0; }
+  #flow-svg { position: absolute; left: 0; top: 0; width: 2000px; height: 1200px; pointer-events: none; overflow: visible; }
+  .edge { fill: none; stroke: #2e2e35; stroke-width: 1.5; }
+  .edge-flow { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 4 10; animation: dash 1.2s linear infinite; opacity: .7; }
+  @keyframes dash { to { stroke-dashoffset: -14; } }
+  .node { position: absolute; width: 210px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; cursor: grab; user-select: none; transition: border-color .15s; touch-action: none; }
+  .node:hover, .node.drag { border-color: #3f3f46; }
+  .node.drag { cursor: grabbing; z-index: 5; }
+  .node.sel { border-color: var(--accent); }
+  .handle { position: absolute; top: 50%; width: 9px; height: 9px; border-radius: 50%; background: var(--bg); border: 1.5px solid #3f3f46; transform: translateY(-50%); }
+  .handle.l { left: -5px; } .handle.r { right: -5px; }
+  .term-line { white-space: pre-wrap; word-break: break-word; }
+  .caret { display: inline-block; width: 7px; height: 15px; background: var(--accent); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .comp-card { transition: border-color .15s, background .15s; }
+  .comp-card:hover { border-color: var(--border-strong); background: var(--surface); }
+  .comp-stage .ib-root { pointer-events: none; transform: scale(.82); transform-origin: center; }
+  .nav-link { color: var(--muted); transition: color .15s; }
+  .nav-link:hover { color: var(--text); }
+</style>
+    <!-- puter-pwa: generated, do not edit -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon-180.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="InkBuddy">
+    <!-- /puter-pwa -->
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fixed top-0 inset-x-0 z-50 border-b border-[#1c1c20] bg-[#09090b]/80 backdrop-blur-md">
+  <div class="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2.5">
+      <img src="icon.svg" alt="" class="w-6 h-6">
+      <span class="text-sm font-semibold tracking-tight">InkBuddy</span>
+      <span class="mono text-[10px] px-1.5 py-0.5 rounded border border-[#26262b] text-[#a1a1aa]">v2.0</span>
+    </a>
+    <div class="hidden md:flex items-center gap-7 text-[13px]">
+      <a href="#components" class="nav-link">Components</a>
+      <a href="#quickstart" class="nav-link">Quickstart</a>
+      <a href="#architecture" class="nav-link">Architecture</a>
+      <a href="#mcp" class="nav-link">AI / MCP</a>
+    </div>
+    <div class="flex items-center gap-2">
+      <a href="https://github.com" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:17px;height:17px"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6 0-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8 0 3.2.9.8 1.3 1.9 1.3 3.2 0 4.6-2.8 5.6-5.5 5.9.5.4.9 1 .9 2.2v3.3c0 .3.1.7.8.6A12 12 0 0 0 12 .3"/></svg>
+      </a>
+      <a href="studio.html" class="btn btn-light h-8 text-[13px]"><i data-lucide="flask-conical"></i>Open Studio</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="pt-32 md:pt-40 pb-20 px-5">
+  <div class="max-w-6xl mx-auto grid lg:grid-cols-[1.05fr_1fr] gap-12 items-center">
+    <div>
+      <a href="#mcp" class="inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full border border-[#26262b] text-[12px] text-[#a1a1aa] hover:border-[#3f3f46] transition-colors mb-7">
+        <span class="px-1.5 py-0.5 rounded-full bg-[#4ade80]/10 text-[#4ade80] mono text-[10px]">NEW</span>
+        MCP server for AI agents <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+      </a>
+      <h1 class="text-[42px] md:text-6xl font-semibold tracking-[-0.035em] leading-[1.05] mb-6">
+        Design tokens in.<br><span class="text-[#63636b]">React components out.</span>
+      </h1>
+      <p class="text-[17px] text-[#a1a1aa] leading-relaxed max-w-lg mb-9">
+        InkBuddy is the CLI that turns your design system into accessible, typed, Radix-powered components — in milliseconds, not sprints.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <button id="copy-install" class="group flex items-center justify-between gap-4 h-11 px-4 rounded-lg border border-[#26262b] bg-[#0f0f12] mono text-[13px] hover:border-[#3f3f46] transition-colors">
+          <span><span class="text-[#63636b]">$</span> npm i -g inkbuddy-cli</span>
+          <i data-lucide="copy" class="w-4 h-4 text-[#63636b] group-hover:text-white"></i>
+        </button>
+        <a href="studio.html" class="btn btn-accent h-11 px-5">Try the Studio <i data-lucide="arrow-right"></i></a>
+      </div>
+      <div class="flex items-center gap-6 mt-10 text-[12px] text-[#63636b]">
+        <span class="flex items-center gap-1.5"><i data-lucide="shield-check" class="w-4 h-4"></i>WCAG 2.2 AA</span>
+        <span class="flex items-center gap-1.5"><i data-lucide="file-type" class="w-4 h-4"></i>TypeScript</span>
+        <span class="flex items-center gap-1.5"><i data-lucide="scale" class="w-4 h-4"></i>MIT</span>
+      </div>
+    </div>
+
+    <!-- Interactive terminal -->
+    <div class="rounded-xl border border-[#222227] bg-[#0c0c0e] overflow-hidden">
+      <div class="h-10 px-4 flex items-center justify-between border-b border-[#1c1c20]">
+        <div class="flex gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#2a2a30]"></span><span class="w-2.5 h-2.5 rounded-full bg-[#2a2a30]"></span><span class="w-2.5 h-2.5 rounded-full bg-[#2a2a30]"></span></div>
+        <span class="mono text-[11px] text-[#63636b]">~/acme-app — zsh</span>
+        <button id="term-replay" class="icon-btn w-7 h-7" title="Replay"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+      <div id="term" class="mono text-[12.5px] leading-[1.7] p-5 h-[340px] overflow-y-auto cursor-text"></div>
+      <div class="px-4 py-2.5 border-t border-[#1c1c20] flex flex-wrap gap-1.5" id="term-chips"></div>
+    </div>
+  </div>
+</header>
+
+<!-- STATS -->
+<section class="px-5">
+  <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 border border-[#1c1c20] rounded-xl divide-x divide-[#1c1c20] [&>*:nth-child(n+3)]:border-t md:[&>*:nth-child(n+3)]:border-t-0 [&>*]:border-[#1c1c20]">
+    <div class="p-6"><div class="text-2xl font-semibold tracking-tight">15</div><div class="text-[13px] text-[#63636b] mt-1">Primitives</div></div>
+    <div class="p-6"><div class="text-2xl font-semibold tracking-tight">&lt;40ms</div><div class="text-[13px] text-[#63636b] mt-1">Per component</div></div>
+    <div class="p-6"><div class="text-2xl font-semibold tracking-tight">100%</div><div class="text-[13px] text-[#63636b] mt-1">Typed output</div></div>
+    <div class="p-6"><div class="text-2xl font-semibold tracking-tight">3</div><div class="text-[13px] text-[#63636b] mt-1">MCP tools</div></div>
+  </div>
+</section>
+
+<!-- COMPONENTS -->
+<section id="components" class="py-28 px-5">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+      <div>
+        <div class="label-xs mb-3">01 — Primitives</div>
+        <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-3">A complete component library</h2>
+        <p class="text-[#a1a1aa] max-w-xl">Every primitive is rendered live from the same templates the CLI generates. Click any card to open it in the Studio.</p>
+      </div>
+      <div class="flex gap-1 p-1 rounded-lg border border-[#222227] overflow-x-auto" id="cat-filter"></div>
+    </div>
+    <div id="comp-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+  </div>
+</section>
+
+<!-- QUICKSTART -->
+<section id="quickstart" class="py-28 px-5 border-t border-[#1c1c20]">
+  <div class="max-w-6xl mx-auto">
+    <div class="label-xs mb-3">02 — Quickstart</div>
+    <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-12">From zero to shipped in three steps</h2>
+    <div class="grid md:grid-cols-3 gap-3" id="steps"></div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture" class="py-28 px-5 border-t border-[#1c1c20]">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+      <div>
+        <div class="label-xs mb-3">03 — Architecture</div>
+        <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-3">The design-to-code pipeline</h2>
+        <p class="text-[#a1a1aa] max-w-xl">Drag nodes, pan the canvas and scroll to zoom. Select a node to see what it does.</p>
+      </div>
+      <div class="flex gap-1">
+        <button class="icon-btn border border-[#222227]" id="z-out" title="Zoom out"><i data-lucide="minus"></i></button>
+        <button class="icon-btn border border-[#222227]" id="z-in" title="Zoom in"><i data-lucide="plus"></i></button>
+        <button class="icon-btn border border-[#222227]" id="z-fit" title="Reset view"><i data-lucide="maximize"></i></button>
+      </div>
+    </div>
+    <div class="grid lg:grid-cols-[1fr_280px] gap-3">
+      <div id="flow" class="dot-grid rounded-xl border border-[#222227] bg-[#0c0c0e]">
+        <div id="flow-layer"><svg id="flow-svg"></svg></div>
+        <div class="absolute bottom-3 left-3 mono text-[11px] text-[#63636b] pointer-events-none" id="zoom-label">100%</div>
+      </div>
+      <aside id="node-info" class="rounded-xl border border-[#222227] p-5 bg-[#0c0c0e]"></aside>
+    </div>
+  </div>
+</section>
+
+<!-- MCP -->
+<section id="mcp" class="py-28 px-5 border-t border-[#1c1c20]">
+  <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+    <div>
+      <div class="label-xs mb-3">04 — AI native</div>
+      <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-5">Let agents build with your system</h2>
+      <p class="text-[#a1a1aa] leading-relaxed mb-8">InkBuddy implements the <span class="text-white">Model Context Protocol</span>, so Claude, Cursor and other agents can discover your templates and generate on-brand components — no hallucinated styles.</p>
+      <div class="space-y-2">
+        <div class="flex gap-3 p-4 rounded-lg border border-[#1c1c20]"><i data-lucide="list" class="w-4 h-4 text-[#4ade80] mt-0.5 shrink-0"></i><div><div class="mono text-[13px]">list_templates</div><div class="text-[13px] text-[#63636b] mt-0.5">Discover every primitive, variant and prop.</div></div></div>
+        <div class="flex gap-3 p-4 rounded-lg border border-[#1c1c20]"><i data-lucide="wand-sparkles" class="w-4 h-4 text-[#4ade80] mt-0.5 shrink-0"></i><div><div class="mono text-[13px]">generate_component</div><div class="text-[13px] text-[#63636b] mt-0.5">Scaffold components from natural-language prompts.</div></div></div>
+        <div class="flex gap-3 p-4 rounded-lg border border-[#1c1c20]"><i data-lucide="palette" class="w-4 h-4 text-[#4ade80] mt-0.5 shrink-0"></i><div><div class="mono text-[13px]">setup_design_system</div><div class="text-[13px] text-[#63636b] mt-0.5">Inject tokens and global styles automatically.</div></div></div>
+      </div>
+    </div>
+    <div class="rounded-xl border border-[#222227] bg-[#0c0c0e] overflow-hidden">
+      <div class="h-10 px-4 flex items-center justify-between border-b border-[#1c1c20]">
+        <span class="mono text-[12px] text-[#a1a1aa] flex items-center gap-2"><i data-lucide="file-json" class="w-3.5 h-3.5"></i>mcp.json</span>
+        <button class="icon-btn w-7 h-7" id="copy-mcp" title="Copy"><i data-lucide="copy"></i></button>
+      </div>
+<pre class="mono text-[12.5px] leading-[1.75] p-5 overflow-x-auto" id="mcp-code">{
+  <span class="tok-a">"mcpServers"</span>: {
+    <span class="tok-a">"inkbuddy"</span>: {
+      <span class="tok-a">"command"</span>: <span class="tok-s">"npx"</span>,
+      <span class="tok-a">"args"</span>: [<span class="tok-s">"inkbuddy-cli"</span>, <span class="tok-s">"mcp"</span>],
+      <span class="tok-a">"env"</span>: { <span class="tok-a">"INKBUDDY_TOKENS"</span>: <span class="tok-s">"./tokens.json"</span> }
+    }
+  }
+}</pre>
+      <div class="border-t border-[#1c1c20] p-5 space-y-3 text-[13px]">
+        <div class="flex gap-3"><span class="w-6 h-6 rounded-full bg-[#1c1c20] flex items-center justify-center shrink-0"><i data-lucide="user" class="w-3.5 h-3.5"></i></span><p class="text-[#a1a1aa] pt-0.5">Add a pricing card with a primary CTA.</p></div>
+        <div class="flex gap-3"><span class="w-6 h-6 rounded-full bg-[#4ade80]/15 text-[#4ade80] flex items-center justify-center shrink-0"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i></span><p class="pt-0.5"><span class="mono text-[12px] text-[#4ade80]">generate_component</span><span class="text-[#63636b]">(card, button)</span> → created <span class="mono text-[12px]">PricingCard.tsx</span></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="px-5 pb-24">
+  <div class="max-w-6xl mx-auto rounded-2xl border border-[#222227] dot-grid p-10 md:p-16 text-center">
+    <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-4">Explore every component, live.</h2>
+    <p class="text-[#a1a1aa] mb-8 max-w-lg mx-auto">Tweak props, theme with your own tokens, and copy production-ready code from the InkBuddy Studio.</p>
+    <a href="studio.html" class="btn btn-light h-11 px-6">Open Studio <i data-lucide="arrow-right"></i></a>
+  </div>
+</section>
+
+<footer class="border-t border-[#1c1c20] px-5 py-8">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-[13px] text-[#63636b]">
+    <div class="flex items-center gap-2"><img src="icon.svg" alt="" class="w-5 h-5"> InkBuddy · MIT License</div>
+    <div class="flex gap-6"><a href="assets/tokens.json" target="_blank" class="nav-link">tokens.json</a><a href="assets/inkbuddyCli.zip" download class="nav-link">Download CLI</a><a href="studio.html" class="nav-link">Studio</a></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"><i data-lucide="check"></i><span></span></div>
+
+<script type="module" src="js/landing.js"></script>
+</body>
+</html>

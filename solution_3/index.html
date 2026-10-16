@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Pipeline Orchestrator — Technical Blueprint</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xyflow/react@12/dist/style.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <div class="view-main" id="view-main">
+        <div class="container">
+            <div class="topbar">
+                <div class="brand">
+                    <span class="brand-mark">&#9670;</span>
+                    <span class="brand-name">Orchestrator</span>
+                </div>
+                <div class="status-badge">
+                    <div class="status-dot"></div>
+                    Pipeline Green
+                </div>
+            </div>
+
+            <section class="hero">
+                <div class="hero-glow"></div>
+                <div class="hero-inner">
+                    <div class="hero-eyebrow">Design Systems Infrastructure</div>
+                    <h1>Ship design tokens <span class="grad">at the speed of code</span></h1>
+                    <p class="hero-sub">An AI-orchestrated pipeline that watches Figma, transforms tokens for every platform, and deploys them to a global edge network — with zero manual handoffs.</p>
+                    <div class="hero-actions">
+                        <button class="btn-primary" id="hero-explore">Explore the Pipeline</button>
+                        <button class="btn-ghost" id="hero-sim">Run Live Simulation</button>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="hero-stat"><span class="n">4</span><span class="l">Orchestrated Stages</span></div>
+                        <div class="hero-stat"><span class="n">142</span><span class="l">Tokens Synced</span></div>
+                        <div class="hero-stat"><span class="n">3</span><span class="l">Target Platforms</span></div>
+                        <div class="hero-stat"><span class="n">11h</span><span class="l">Saved / Sprint</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="flow-panel" id="flow-panel">
+                <div class="flow-head">
+                    <span class="flow-label">System Topology / orchestrator.flow</span>
+                    <span class="flow-hint">Click a stage to enter workspace</span>
+                </div>
+                <div class="flow-canvas" id="flow-root"></div>
+            </div>
+
+            
+
+            <div class="bottom-grid">
+                <div class="metrics-group">
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <span class="kpi-value" id="metric-1">0h</span>
+                            <span class="kpi-label">Saved per sprint</span>
+                        </div>
+                        <div class="kpi-card">
+                            <span class="kpi-value" id="metric-2">0</span>
+                            <span class="kpi-label">Manual docs</span>
+                        </div>
+                    </div>
+                    <div class="trade-offs-card">
+                        <h4>Constraints & Trade-offs</h4>
+                        <ul class="trade-off-list">
+                            <li class="trade-off-item">Strict token naming required</li>
+                            <li class="trade-off-item">Initial setup overhead</li>
+                            <li class="trade-off-item">Figma API dependency</li>
+                            <li class="trade-off-item">Governance requirement</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="terminal-card">
+                    <div class="terminal-header">
+                        <span>execution_log.sh</span>
+                        <span>UTF-8</span>
+                    </div>
+                    <div class="terminal-body" id="terminal-body"></div>
+                    <div class="terminal-footer">
+                        <span class="log-time">14:22:01</span> <span class="log-msg">awaiting_next_step...</span> <span class="cursor"></span>
+                    </div>
+                </div>
+            </div>
+        
+            <section class="about-section" id="about">
+                <div class="about-head">
+                    <div>
+                        <div class="about-kicker">How It Works</div>
+                        <h2>From a design tweak to every production surface.</h2>
+                    </div>
+                    <p class="about-lead">
+                        The orchestrator treats design as code. Each Figma library publish fires a webhook that flows through <strong>four autonomous stages</strong> — ingestion, transformation, version control, and deployment. Every change is validated, tested against visual baselines, and shipped to the edge in seconds. No exports, no handoffs, no drift.
+                    </p>
+                </div>
+                <div class="about-steps">
+                    <div class="about-step">
+                        <span class="idx">01 / INGEST</span>
+                        <span class="ico">&#127912;</span>
+                        <h4>Capture &amp; Normalize</h4>
+                        <p>Webhooks pull variables from Figma the moment a library is published, resolving aliases into concrete primitive values.</p>
+                    </div>
+                    <div class="about-step">
+                        <span class="idx">02 / TRANSFORM</span>
+                        <span class="ico">&#9881;&#65039;</span>
+                        <h4>Compile per Platform</h4>
+                        <p>A single token maps to CSS vars, Android XML, and Swift properties — unit-corrected for every target environment.</p>
+                    </div>
+                    <div class="about-step">
+                        <span class="idx">03 / VERIFY</span>
+                        <span class="ico">&#128025;</span>
+                        <h4>Version &amp; Test</h4>
+                        <p>Artifacts commit to Git, triggering CI visual-regression tests that compare pixels against the production baseline.</p>
+                    </div>
+                    <div class="about-step">
+                        <span class="idx">04 / DEPLOY</span>
+                        <span class="ico">&#128640;</span>
+                        <h4>Ship to the Edge</h4>
+                        <p>Approved changes roll out through a canary to a global CDN, updating themes for all users in milliseconds.</p>
+                    </div>
+                </div>
+            </section>
+</div>
+    </div>
+
+    <!-- ============ WORKSPACE VIEW ============ -->
+    <div class="workspace" id="workspace">
+        <div class="workspace-header">
+            <div class="breadcrumb">
+                SYSTEM / <span class="crumb-accent">BLUEPRINT</span> / <span id="ws-crumb">STAGE</span>
+            </div>
+            <button class="close-workspace" id="close-ws">×</button>
+        </div>
+
+        <div class="workspace-content" id="ws-content">
+            <!-- Dynamic content -->
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+
+    <script type="module" src="js/flow.js"></script>
+</body>
+</html>

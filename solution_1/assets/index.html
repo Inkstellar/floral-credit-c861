@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InkBuddy Design System CLI | AI-Powered Component Scaffolding</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Portfolio Core Palette */
+            --bg-main: #050505; 
+            --bg-surface: #0a0a0a;
+            --bg-card: #111111;
+            --border-color: #1f1f1f;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --accent: #4ade80;
+            --accent-muted: rgba(74, 222, 128, 0.1);
+            
+            /* Typography */
+            --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: "SF Mono", "Fira Code", "Menlo", "Consolas", monospace;
+        }
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: -0.01em;
+        }
+        .glass {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+        }
+        .card-hover {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border-color);
+        }
+        .card-hover:hover {
+            border-color: #333;
+            background: var(--bg-card);
+            transform: translateY(-2px);
+        }
+        .gradient-text {
+            background: linear-gradient(180deg, #fff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .code-block {
+            background: #000000;
+            border: 1px solid var(--border-color);
+            font-family: var(--font-mono);
+        }
+        .section-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+        .btn-primary {
+            background: var(--text-primary);
+            color: var(--bg-main);
+            transition: all 0.2s ease;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            background: var(--text-secondary);
+            transform: translateY(-1px);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+        .btn-secondary:hover {
+            background: var(--bg-surface);
+            border-color: #333;
+        }
+        /* --- ReactFlow-inspired Styles --- */
+        #flow-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background-image: radial-gradient(circle, #1f1f1f 1px, transparent 1px);
+            background-size: 30px 30px;
+            cursor: grab;
+            overflow: hidden;
+            user-select: none;
+        }
+        #flow-container:active { cursor: grabbing; }
+        
+        #flow-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-origin: 0 0;
+            will-change: transform;
+        }
+        
+        .flow-node {
+            position: absolute;
+            z-index: 10;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            width: 220px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .flow-node:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.1);
+        }
+        .flow-node .node-header {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .flow-node .node-content {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .flow-node .node-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+        .flow-handle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--border-color);
+            border: 2px solid var(--bg-main);
+            border-radius: 50%;
+            z-index: 20;
+        }
+        .flow-handle:hover { background: var(--accent); }
+        .handle-left { left: -5px; top: 50%; transform: translateY(-50%); }
+        .handle-right { right: -5px; top: 50%; transform: translateY(-50%); }
+        .handle-top { top: -5px; left: 50%; transform: translateX(-50%); }
+        .handle-bottom { bottom: -5px; left: 50%; transform: translateX(-50%); }
+
+        #flow-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+        .flow-edge {
+            fill: none;
+            stroke: #333;
+            stroke-width: 2;
+            stroke-linecap: round;
+            transition: stroke 0.2s;
+        }
+        .flow-edge.active {
+            stroke: var(--accent);
+            filter: drop-shadow(0 0 5px var(--accent));
+        }
+        .edge-animation {
+            stroke-dasharray: 8, 8;
+            animation: edgeFlow 1s linear infinite;
+        }
+        @keyframes edgeFlow {
+            from { stroke-dashoffset: 16; }
+            to { stroke-dashoffset: 0; }
+        }
+        @keyframes flow {
+            from { stroke-dashoffset: 20; }
+            to { stroke-dashoffset: 0; }
+        }
+        .flow-line {
+            stroke-dasharray: 8, 4;
+            animation: flow 1s linear infinite;
+        }
+    </style>
+</head>
+<body class="selection:bg-emerald-500/30">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 border-b border-[#1f1f1f] bg-black/50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-6 h-6 bg-white text-black rounded flex items-center justify-center font-mono font-bold text-xs">IB</div>
+                <span class="text-sm font-medium tracking-tight">InkBuddy <span class="text-emerald-500">CLI</span></span>
+            </div>
+            <div class="hidden md:flex items-center gap-8 text-xs font-medium text-secondary">
+                <a href="#components" class="text-[#a1a1aa] hover:text-white transition-colors">Components</a>
+                <a href="#consumption" class="text-[#a1a1aa] hover:text-white transition-colors">Usage</a>
+                <a href="#workflow" class="text-[#a1a1aa] hover:text-white transition-colors">Architecture</a>
+                <a href="#mcp" class="text-[#a1a1aa] hover:text-white transition-colors">AI / MCP</a>
+                <a href="studio.html" class="btn-secondary px-3 py-1 rounded text-white flex items-center gap-2">
+                    <i class="fas fa-flask text-[10px]"></i> Open Studio
+                </a>
+                <a href="https://github.com" class="btn-secondary px-3 py-1 rounded text-white">GitHub</a>
+            </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-40 pb-24 px-6 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--accent-muted)_0%,_transparent_50%)] -z-10 opacity-50"></div>
+        
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#111] border border-[#222] text-[#a1a1aa] text-[10px] font-mono mb-8">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                v1.0.0 Stable Release
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tighter mb-8 leading-[1.1] gradient-text">
+                Scaffold Design Systems <br>
+                in Milliseconds.
+            </h1>
+            <p class="text-lg md:text-xl text-[#a1a1aa] max-w-2xl mx-auto mb-12 leading-relaxed">
+                The connective tissue between design tokens and React. InkBuddy CLI generates production-ready, accessible components compatible with Radix UI.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#consumption" class="w-full sm:w-auto px-8 py-3 btn-primary rounded-full text-sm">
+                    Get Started
+                </a>
+                <div class="w-full sm:w-auto px-5 py-3 glass rounded-full font-mono text-xs text-emerald-500 flex items-center gap-3 border-[#1f1f1f]">
+                    <span>npm install -g inkbuddy-cli</span>
+                    <button class="text-[#555] hover:text-white"><i class="far fa-copy"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Component Showcase -->
+    <section id="components" class="py-24 px-6 border-t border-[#1f1f1f]">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16">
+                <div class="section-label mb-2">/ 01 Primitives</div>
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">Available Components</h2>
+                <p class="text-[#a1a1aa] max-w-xl">Enterprise-grade UI primitives scaffolded with WCAG accessibility and design token integration by default.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Button -->
+                <div class="glass p-6 rounded-xl card-hover">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="p-2 bg-[#1a1a1a] rounded border border-[#222] text-emerald-500">
+                            <i class="fas fa-mouse-pointer text-sm"></i>
+                        </div>
+                        <span class="text-[10px] font-mono text-[#555]">template: button</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Button</h3>
+                    <p class="text-sm text-[#a1a1aa] mb-6">Versatile action triggers with 4 built-in variants and 3 size scales.</p>
+                    <div class="space-y-2 mb-6">
+                        <div class="flex justify-between text-[11px] font-mono">
+                            <span class="text-[#555]">Variants</span>
+                            <span class="text-white">primary, secondary, ghost, outline</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-black rounded-lg flex flex-wrap gap-2 border border-[#1f1f1f]">
+                        <div class="px-2 py-0.5 bg-emerald-500 text-black text-[10px] font-bold rounded">Primary</div>
+                        <div class="px-2 py-0.5 bg-[#1f1f1f] text-white text-[10px] font-bold rounded border border-[#333]">Secondary</div>
+                    </div>
+                </div>
+
+                <!-- Input -->
+                <div class="glass p-6 rounded-xl card-hover">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="p-2 bg-[#1a1a1a] rounded border border-[#222] text-emerald-500">
+                            <i class="fas fa-keyboard text-sm"></i>
+                        </div>
+                        <span class="text-[10px] font-mono text-[#555]">template: input</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Input</h3>
+                    <p class="text-sm text-[#a1a1aa] mb-6">Accessible form fields with native WCAG focus ring management.</p>
+                    <div class="space-y-2 mb-6">
+                        <div class="flex justify-between text-[11px] font-mono">
+                            <span class="text-[#555]">Types</span>
+                            <span class="text-white">text, email, select, textarea</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-black rounded-lg border border-[#1f1f1f]">
+                        <div class="w-full h-7 bg-[#0a0a0a] border border-[#222] rounded px-2 text-[10px] text-[#555] flex items-center">Enter value...</div>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="glass p-6 rounded-xl card-hover">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="p-2 bg-[#1a1a1a] rounded border border-[#222] text-emerald-500">
+                            <i class="fas fa-window-maximize text-sm"></i>
+                        </div>
+                        <span class="text-[10px] font-mono text-[#555]">template: modal</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Modal</h3>
+                    <p class="text-sm text-[#a1a1aa] mb-6">Overlay dialogs with ARIA-compliant focus trapping.</p>
+                    <div class="space-y-2 mb-6">
+                        <div class="flex justify-between text-[11px] font-mono">
+                            <span class="text-[#555]">Props</span>
+                            <span class="text-white">title, body, onClose</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-black rounded-lg border border-[#1f1f1f] relative overflow-hidden">
+                        <div class="w-16 h-10 bg-[#111] rounded border border-[#222] mx-auto"></div>
+                    </div>
+                </div>
+
+                <!-- Card -->
+                <div class="glass p-6 rounded-xl card-hover">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="p-2 bg-[#1a1a1a] rounded border border-[#222] text-emerald-500">
+                            <i class="fas fa-id-card text-sm"></i>
+                        </div>
+                        <span class="text-[10px] font-mono text-[#555]">template: card</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Card</h3>
+                    <p class="text-sm text-[#a1a1aa] mb-6">Surface containers for modular content layouts.</p>
+                    <div class="space-y-2 mb-6">
+                        <div class="flex justify-between text-[11px] font-mono">
+                            <span class="text-[#555]">Elements</span>
+                            <span class="text-white">Image, Title, Body</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-black rounded-lg border border-[#1f1f1f]">
+                        <div class="w-full h-12 bg-[#0a0a0a] rounded-t border-b border-[#222]"></div>
+                        <div class="w-full h-4 bg-[#0a0a0a] mt-2 rounded"></div>
+                    </div>
+                </div>
+
+                <!-- Badge -->
+                <div class="glass p-6 rounded-xl card-hover">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="p-2 bg-[#1a1a1a] rounded border border-[#222] text-emerald-500">
+                            <i class="fas fa-tag text-sm"></i>
+                        </div>
+                        <span class="text-[10px] font-mono text-[#555]">template: badge</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Badge</h3>
+                    <p class="text-sm text-[#a1a1aa] mb-6">Status indicators for rapid semantic classification.</p>
+                    <div class="space-y-2 mb-6">
+                        <div class="flex justify-between text-[11px] font-mono">
+                            <span class="text-[#555]">Variants</span>
+                            <span class="text-white">success, warning, danger, info</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-black rounded-lg border border-[#1f1f1f] flex gap-2">
+                        <div class="px-2 py-0.5 bg-emerald-500/10 text-emerald-500 text-[9px] rounded border border-emerald-500/20">Success</div>
+                        <div class="px-2 py-0.5 bg-red-500/10 text-red-500 text-[9px] rounded border border-red-500/20">Danger</div>
+                    </div>
+                </div>
+
+                <!-- Loader -->
+                <div class="glass p-6 rounded-xl card-hover">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="p-2 bg-[#1a1a1a] rounded border border-[#222] text-emerald-500">
+                            <i class="fas fa-sync fa-spin text-sm"></i>
+                        </div>
+                        <span class="text-[10px] font-mono text-[#555]">template: loader</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Loader</h3>
+                    <p class="text-sm text-[#a1a1aa] mb-6">Motion-tokenized loading states for consistent UX.</p>
+                    <div class="space-y-2 mb-6">
+                        <div class="flex justify-between text-[11px] font-mono">
+                            <span class="text-[#555]">Controls</span>
+                            <span class="text-white">duration, spinning</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-black rounded-lg border border-[#1f1f1f] flex items-center justify-center">
+                        <div class="w-5 h-5 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Consumption Section -->
+    <section id="consumption" class="py-24 px-6 border-t border-[#1f1f1f]">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <div class="section-label mb-2">/ 02 Workflow</div>
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-6">Consumption Guide</h2>
+                <p class="text-[#a1a1aa] mb-10 leading-relaxed">
+                    InkBuddy reduces the friction of design handover. Instead of static docs, it provides a command-line interface to generate the actual implementation.
+                </p>
+                
+                <div class="space-y-8">
+                    <div class="flex gap-5">
+                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-[#111] border border-[#333] text-white flex items-center justify-center text-[10px] font-mono">1</div>
+                        <div>
+                            <h4 class="text-sm font-semibold mb-1">Initialize Styles</h4>
+                            <p class="text-sm text-[#a1a1aa]">Run <code class="text-emerald-500 font-mono">setup</code> to inject the design system's CSS tokens.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-5">
+                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-[#111] border border-[#333] text-white flex items-center justify-center text-[10px] font-mono">2</div>
+                        <div>
+                            <h4 class="text-sm font-semibold mb-1">Generate Primitive</h4>
+                            <p class="text-sm text-[#a1a1aa]">Use <code class="text-emerald-500 font-mono">generate --type=button</code> to scaffold a component.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-5">
+                        <div class="flex-shrink-0 w-6 h-6 rounded-full bg-[#111] border border-[#333] text-white flex items-center justify-center text-[10px] font-mono">3</div>
+                        <div>
+                            <h4 class="text-sm font-semibold mb-1">Deploy & Scale</h4>
+                            <p class="text-sm text-[#a1a1aa]">Components ship with built-in accessibility and token bindings.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="code-block p-6 rounded-xl shadow-2xl">
+                <div class="flex gap-2 mb-6">
+                    <div class="w-2 h-2 rounded-full bg-[#333]"></div>
+                    <div class="w-2 h-2 rounded-full bg-[#333]"></div>
+                    <div class="w-2 h-2 rounded-full bg-[#333]"></div>
+                </div>
+                <div class="space-y-6 text-xs font-mono">
+                    <div>
+                        <span class="text-[#444]">$</span> <span class="text-emerald-500">inkbuddy setup</span>
+                        <div class="text-[#666] ml-4">✅ Design system styles injected...</div>
+                    </div>
+                    <div>
+                        <span class="text-[#444]">$</span> <span class="text-emerald-500">inkbuddy generate --type=button --variant=primary</span>
+                        <div class="text-[#666] ml-4">Generating Component...</div>
+                        <div class="text-[#666] ml-4">✅ src/components/button/Button.tsx created</div>
+                    </div>
+                    <div>
+                        <span class="text-[#444]">$</span> <span class="text-emerald-500">inkbuddy list</span>
+                        <div class="text-[#888] ml-4">• button: @radix-ui/react-button</div>
+                        <div class="text-[#888] ml-4">• input: @radix-ui/react-textfield</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Workflow Section (React Flow Style) -->
+    <section id="workflow" class="py-24 px-6 border-t border-[#1f1f1f]">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <div class="section-label mb-2">/ 04 Architecture</div>
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">Interactive System Flow</h2>
+                <p class="text-[#a1a1aa] max-w-2xl mx-auto">Drag the nodes to explore the design-to-code pipeline. Watch the live connections as you move.</p>
+            </div>
+
+            <div id="flow-container" class="glass rounded-2xl border-[#1f1f1f] overflow-hidden">
+                <div id="flow-content">
+                    <svg id="flow-svg">
+                        <defs>
+                            <linearGradient id="edgeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#333" />
+                                <stop offset="50%" stop-color="#4ade80" />
+                                <stop offset="100%" stop-color="#333" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MCP Section -->
+    <section id="mcp" class="py-24 px-6 border-t border-[#1f1f1f] relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-1/2 h-1/2 bg-emerald-500/5 blur-[120px] -z-10"></div>
+        
+        <div class="max-w-4xl mx-auto glass p-8 md:p-12 rounded-2xl border-[#222] relative">
+            <div class="absolute -top-3 left-8 px-3 py-1 bg-white text-black font-bold rounded text-[10px] uppercase tracking-widest shadow-lg">
+                AI-Native
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-12 items-center">
+                <div class="flex-1">
+                    <div class="section-label mb-2">/ 03 Integration</div>
+                    <h2 class="text-3xl font-bold tracking-tight mb-6">MCP Server Availability</h2>
+                    <p class="text-[#a1a1aa] mb-8 leading-relaxed">
+                        InkBuddy implements the <span class="text-white font-semibold">Model Context Protocol</span>, enabling AI agents to autonomously manage your design system.
+                    </p>
+                    <ul class="space-y-4 text-sm text-[#a1a1aa] mb-8">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-emerald-500 mt-1"></i>
+                            <span>AI can <code class="text-white font-mono">list_templates</code> to understand system capabilities.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-emerald-500 mt-1"></i>
+                            <span>AI can <code class="text-white font-mono">generate_component</code> via natural language prompts.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check text-emerald-500 mt-1"></i>
+                            <span>Automated <code class="text-white font-mono">setup_design_system</code> routines.</span>
+                        </li>
+                    </ul>
+                    <div class="p-4 bg-black rounded-lg border border-[#1f1f1f] font-mono text-[11px] text-[#666]">
+                        { "mcpServers": { "inkbuddy": { "command": "node", "args": ["src/mcp-server.js"] } } }
+                    </div>
+                </div>
+                <div class="w-full md:w-64 h-64 bg-[#0a0a0a] border border-[#222] rounded-full flex items-center justify-center relative">
+                    <div class="absolute inset-0 rounded-full bg-emerald-500/10 animate-pulse"></div>
+                    <i class="fas fa-robot text-5xl text-white z-10"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const nodesData = [
+            { id: 'tokens', x: 50, y: 250, header: 'Source of Truth', content: 'Figma Tokens', desc: 'Design tokens exported as JSON (colors, spacing, typography).' },
+            { id: 'cli', x: 350, y: 250, header: 'Orchestration', content: 'InkBuddy CLI', desc: 'The central engine that scaffolds components from templates.' },
+            { id: 'mcp', x: 650, y: 250, header: 'AI Integration', content: 'MCP Server', desc: 'Allows AI agents to automate the generation process.' },
+            { id: 'react', x: 350, y: 450, header: 'Implementation', content: 'React Components', desc: 'Production-ready, accessible UI primitives.' },
+            { id: 'handover', x: 650, y: 450, header: 'Delivery', content: 'Dev Handover', desc: 'Ship-ready code with built-in accessibility documentation.' },
+        ];
+
+        const edgesData = [
+            { from: 'tokens', to: 'cli' },
+            { from: 'cli', to: 'mcp' },
+            { from: 'cli', to: 'react' },
+            { from: 'mcp', to: 'handover' },
+            { from: 'react', to: 'handover' },
+        ];
+
+        const container = document.getElementById('flow-container');
+        const content = document.getElementById('flow-content');
+        const svg = document.getElementById('flow-svg');
+        const nodes = {};
+        const edges = [];
+
+        // Canvas Panning State
+        let isPanning = false;
+        let panOffset = { x: 0, y: 0 };
+        let startMouse = { x: 0, y: 0 };
+
+        container.addEventListener('mousedown', (e) => {
+            if (e.target === container || e.target === content || e.target === svg) {
+                isPanning = true;
+                startMouse = { x: e.clientX - panOffset.x, y: e.clientY - panOffset.y };
+                container.style.cursor = 'grabbing';
+            }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isPanning) return;
+            panOffset.x = e.clientX - startMouse.x;
+            panOffset.y = e.clientY - startMouse.y;
+            content.style.transform = `translate(${panOffset.x}px, ${panOffset.y}px)`;
+        });
+
+        window.addEventListener('mouseup', () => {
+            isPanning = false;
+            container.style.cursor = 'grab';
+        });
+
+        function createNode(data) {
+            const el = document.createElement('div');
+            el.className = 'flow-node';
+            el.style.left = data.x + 'px';
+            el.style.top = data.y + 'px';
+            el.innerHTML = `
+                <div class="node-header"><span>${data.header}</span> <i class="fas fa-cog text-[8px]"></i></div>
+                <div class="node-content">${data.content}</div>
+                <div class="node-desc">${data.desc}</div>
+                <div class="flow-handle handle-left"></div>
+                <div class="flow-handle handle-right"></div>
+                <div class="flow-handle handle-top"></div>
+                <div class="flow-handle handle-bottom"></div>
+            `;
+
+            let isDragging = false;
+            let offset = { x: 0, y: 0 };
+
+            el.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+                isDragging = true;
+                offset = { x: e.clientX - el.offsetLeft, y: e.clientY - el.offsetTop };
+                el.style.zIndex = 100;
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const x = e.clientX - offset.x - panOffset.x;
+                const y = e.clientY - offset.y - panOffset.y;
+                el.style.left = x + 'px';
+                el.style.top = y + 'px';
+                updateEdges();
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+                el.style.zIndex = 10;
+            });
+
+            return el;
+        }
+
+        function createEdge(fromId, toId) {
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('class', 'flow-edge edge-animation');
+            path.setAttribute('stroke', 'url(#edgeGrad)');
+            svg.appendChild(path);
+            return { from: fromId, to: toId, el: path };
+        }
+
+        function updateEdges() {
+            edges.forEach(edge => {
+                const fromNode = nodes[edge.from];
+                const toNode = nodes[edge.to];
+                
+                const startX = fromNode.offsetLeft + fromNode.offsetWidth;
+                const startY = fromNode.offsetTop + (fromNode.offsetHeight / 2);
+                const endX = toNode.offsetLeft;
+                const endY = toNode.offsetTop + (toNode.offsetHeight / 2);
+
+                const cp1x = startX + (endX - startX) / 2;
+                const cp2x = startX + (endX - startX) / 2;
+
+                const d = `M ${startX} ${startY} C ${cp1x} ${startY}, ${cp2x} ${endY}, ${endX} ${endY}`;
+                edge.el.setAttribute('d', d);
+            });
+        }
+
+        nodesData.forEach(data => {
+            const nodeEl = createNode(data);
+            content.appendChild(nodeEl);
+            nodes[data.id] = nodeEl;
+        });
+
+        edgesData.forEach(data => {
+            edges.push(createEdge(data.from, data.to));
+        });
+
+        updateEdges();
+        window.addEventListener('resize', updateEdges);
+    </script>
+
+</body>
+</html>
