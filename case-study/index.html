@@ -115,32 +115,48 @@
   }
 
   /* toc */
-  .toc{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-    margin:clamp(50px,7vw,90px) 0;
+  .toc-side{
+    position:sticky;
+    top:clamp(90px,12vh,120px);
+    align-self:start;
+    display:flex;flex-direction:column;gap:2px;
   }
   .toc-item{
-    padding:18px 22px;border-right:1px solid var(--line);
-    display:flex;gap:14px;align-items:baseline;
+    display:flex;gap:12px;align-items:baseline;
+    padding:10px 0;border-left:2px solid var(--line);
+    transition:border-color .2s var(--ease),background .2s var(--ease);
   }
-  .toc-item:last-child{border-right:0}
+  .toc-item:hover{border-left-color:var(--line-2)}
+  .toc-item.active{border-left-color:var(--accent)}
   .toc-num{
-    font-family:var(--mono);font-size:11px;color:var(--accent);
-    letter-spacing:.1em;flex:none;
+    font-family:var(--mono);font-size:10.5px;color:var(--accent);
+    letter-spacing:.1em;flex:none;min-width:18px;
   }
   .toc-link{
-    font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;
+    font-family:var(--mono);font-size:11px;letter-spacing:.05em;
     color:var(--fg-2);transition:color .2s var(--ease);
   }
   .toc-link:hover{color:var(--fg)}
+  .toc-item.active .toc-link{color:var(--fg)}
 
-  /* sections */
-  .case-section{
-    padding-block:clamp(60px,8vw,110px);
-    border-bottom:1px solid var(--line);
+  .case-layout{
+    display:grid;
+    grid-template-columns:minmax(200px,240px) 1fr;
+    gap:clamp(40px,5vw,80px);
+    align-items:start;
   }
-  .case-section:last-child{border-bottom:0}
+
+  @media (max-width:920px){
+    .case-layout{grid-template-columns:1fr}
+    .toc-side{
+      position:relative;top:0;
+      flex-direction:row;flex-wrap:wrap;gap:8px;
+      border-bottom:1px solid var(--line);
+      padding-bottom:18px;margin-bottom:clamp(40px,6vw,70px);
+    }
+    .toc-item{border-left:0;border-bottom:2px solid var(--line);padding:8px 0}
+    .toc-item.active{border-bottom-color:var(--accent)}
+  }
   .sec-num{
     font-family:var(--mono);font-size:12px;color:var(--accent);
     letter-spacing:.1em;display:block;margin-bottom:18px;
@@ -292,18 +308,20 @@
   </section>
 
   <!-- ================= TOC ================= -->
-  <nav class="toc wrap" aria-label="Case study sections">
-    <a class="toc-item" href="#sec-1"><span class="toc-num">01</span><span class="toc-link">The short version</span></a>
-    <a class="toc-item" href="#sec-2"><span class="toc-num">02</span><span class="toc-link">Where I started</span></a>
-    <a class="toc-item" href="#sec-3"><span class="toc-num">03</span><span class="toc-link">What the problem turned out to be</span></a>
-    <a class="toc-item" href="#sec-4"><span class="toc-num">04</span><span class="toc-link">Model the academic year first</span></a>
-    <a class="toc-item" href="#sec-5"><span class="toc-num">05</span><span class="toc-link">One permission model, four shells</span></a>
-    <a class="toc-item" href="#sec-6"><span class="toc-num">06</span><span class="toc-link">Dashboards as programs</span></a>
-    <a class="toc-item" href="#sec-7"><span class="toc-num">07</span><span class="toc-link">What shipped</span></a>
-    <a class="toc-item" href="#sec-8"><span class="toc-num">08</span><span class="toc-link">Outcome</span></a>
-    <a class="toc-item" href="#sec-9"><span class="toc-num">09</span><span class="toc-link">Looking back</span></a>
-  </nav>
+  <div class="wrap case-layout">
+    <nav class="toc-side" aria-label="Case study sections">
+      <a class="toc-item" href="#sec-1"><span class="toc-num">01</span><span class="toc-link">The short version</span></a>
+      <a class="toc-item" href="#sec-2"><span class="toc-num">02</span><span class="toc-link">Where I started</span></a>
+      <a class="toc-item" href="#sec-3"><span class="toc-num">03</span><span class="toc-link">What the problem turned out to be</span></a>
+      <a class="toc-item" href="#sec-4"><span class="toc-num">04</span><span class="toc-link">Model the academic year first</span></a>
+      <a class="toc-item" href="#sec-5"><span class="toc-num">05</span><span class="toc-link">One permission model, four shells</span></a>
+      <a class="toc-item" href="#sec-6"><span class="toc-num">06</span><span class="toc-link">Dashboards as programs</span></a>
+      <a class="toc-item" href="#sec-7"><span class="toc-num">07</span><span class="toc-link">What shipped</span></a>
+      <a class="toc-item" href="#sec-8"><span class="toc-num">08</span><span class="toc-link">Outcome</span></a>
+      <a class="toc-item" href="#sec-9"><span class="toc-num">09</span><span class="toc-link">Looking back</span></a>
+    </nav>
 
+    <div class="case-content">
   <!-- ================= 01 OVERVIEW ================= -->
   <section id="sec-1" class="case-section">
     <div class="wrap">
@@ -509,6 +527,9 @@
     </div>
   </section>
 
+    </div>
+  </div>
+
   <!-- ================= FINAL CTA ================= -->
   <section class="final-cta">
     <div class="wrap">
@@ -569,6 +590,32 @@
       el.style.transitionDelay = Math.min(i % 6, 5) * 55 + 'ms';
       io.observe(el);
     });
+  }
+
+  /* side toc scroll spy */
+  var tocLinks = document.querySelectorAll('.toc-item');
+  var sections = [];
+  tocLinks.forEach(function(link) {
+    var id = link.getAttribute('href');
+    if (id && id.startsWith('#')) {
+      var sec = document.getElementById(id.slice(1));
+      if (sec) sections.push({link: link, sec: sec});
+    }
+  });
+  function updateActiveToc() {
+    var scrollY = window.scrollY;
+    var current = sections[0];
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].sec.offsetTop - 120 <= scrollY) {
+        current = sections[i];
+      }
+    }
+    tocLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.link.classList.add('active');
+  }
+  if (sections.length) {
+    window.addEventListener('scroll', updateActiveToc, { passive: true });
+    updateActiveToc();
   }
 })();
 </script>
