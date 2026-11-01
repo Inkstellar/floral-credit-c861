@@ -214,17 +214,35 @@
 
   /* screens grid */
   .screens{
-    display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:28px;
+    display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;margin-top:28px;padding-bottom:10px;
+    scrollbar-width:thin;scrollbar-color:var(--line) transparent;
   }
+  .screens::-webkit-scrollbar{height:8px}
+  .screens::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
+  .screens-wrap{position:relative}
   .screen{
+    flex:0 0 clamp(280px, 42vw, 520px);
+    scroll-snap-align:start;
     background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);
     overflow:hidden;
   }
+  .screen img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
   .screen figcaption{
     padding:14px 18px;border-top:1px solid var(--line);
     font-family:var(--mono);font-size:11px;letter-spacing:.1em;
     text-transform:uppercase;color:var(--fg-3);
   }
+  .slider-btn{
+    position:absolute;top:50%;transform:translateY(-50%);
+    width:36px;height:36px;border-radius:50%;
+    background:var(--surface);border:1px solid var(--line);
+    color:var(--fg);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;z-index:2;transition:.2s var(--ease);
+  }
+  .slider-btn:hover{background:var(--bg-2);border-color:var(--line-2)}
+  .slider-btn.prev{left:8px}
+  .slider-btn.next{right:8px}
 
   /* final cta */
   .final-cta{
@@ -449,38 +467,40 @@
           <li><strong>The record</strong> — roles, permissions, custom fields, audit log and exports.</li>
         </ul>
 
-        <div class="screens">
-          <figure class="screen rv">
-            <div style="aspect-ratio:16/9;background:var(--bg-2);display:flex;align-items:center;justify-content:center;color:var(--fg-3);font-family:var(--mono);font-size:12px;">DASHBOARD</div>
-            <figcaption>Admin overview: enrolment, attendance and collections from the same academic year.</figcaption>
-          </figure>
-          <figure class="screen rv">
-            <div style="aspect-ratio:16/9;background:var(--bg-2);display:flex;align-items:center;justify-content:center;color:var(--fg-3);font-family:var(--mono);font-size:12px;">STUDENTS</div>
-            <figcaption>One student record, from admission through to the report card.</figcaption>
-          </figure>
-          <figure class="screen rv">
-            <div style="aspect-ratio:16/9;background:var(--bg-2);display:flex;align-items:center;justify-content:center;color:var(--fg-3);font-family:var(--mono);font-size:12px;">ATTENDANCE</div>
-            <figcaption>Daily attendance against the right class and section, with staff attendance alongside.</figcaption>
-          </figure>
-          <figure class="screen rv">
-            <div style="aspect-ratio:16/9;background:var(--bg-2);display:flex;align-items:center;justify-content:center;color:var(--fg-3);font-family:var(--mono);font-size:12px;">FEES</div>
-            <figcaption>Structures, fines, discounts, dues and receipts in one ledger.</figcaption>
-          </figure>
-          <figure class="screen rv">
-            <div style="aspect-ratio:16/9;background:var(--bg-2);display:flex;align-items:center;justify-content:center;color:var(--fg-3);font-family:var(--mono);font-size:12px;">EVENTS</div>
-            <figcaption>Events and news, published once and shown on the public school site.</figcaption>
-          </figure>
-          <figure class="screen rv">
-            <div style="aspect-ratio:16/9;background:var(--bg-2);display:flex;align-items:center;justify-content:center;color:var(--fg-3);font-family:var(--mono);font-size:12px;">PARENT PORTAL</div>
-            <figcaption>Every child, fee and result in a single parent view.</figcaption>
-          </figure>
-          <figure class="screen rv">
-            <div style="aspect-ratio:16/9;background:var(--bg-2);display:flex;align-items:center;justify-content:center;color:var(--fg-3);font-family:var(--mono);font-size:12px;">TEACHER PORTAL</figcaption>
-            <figcaption>Today’s classes, attendance and marks for the teacher who teaches them.</figcaption>
-          </figure>
+        <div class="screens-wrap">
+          <div class="screens">
+            <figure class="screen rv">
+              <img src="case-study/assets/dashboard.jpg" alt="Admin dashboard showing enrolment, attendance and collections from the same academic year.">
+              <figcaption><span>Dashboard</span><span class="badge">Admin</span></figcaption>
+            </figure>
+            <figure class="screen rv">
+              <img src="case-study/assets/students.jpg" alt="Student record from admission through to the report card.">
+              <figcaption><span>Students</span><span class="badge">Admin</span></figcaption>
+            </figure>
+            <figure class="screen rv">
+              <img src="case-study/assets/attendance.jpg" alt="Daily attendance against the right class and section, with staff attendance alongside.">
+              <figcaption><span>Attendance</span><span class="badge">Admin · Teacher</span></figcaption>
+            </figure>
+            <figure class="screen rv">
+              <img src="case-study/assets/fees.jpg" alt="Fee structures, fines, discounts, dues and receipts in one ledger.">
+              <figcaption><span>Fees</span><span class="badge">Admin · Parent</span></figcaption>
+            </figure>
+            <figure class="screen rv">
+              <img src="case-study/assets/events.jpg" alt="Events and news, published once and shown on the public school site.">
+              <figcaption><span>Events</span><span class="badge">Admin</span></figcaption>
+            </figure>
+            <figure class="screen rv">
+              <img src="case-study/assets/parent-portal.jpg" alt="Every child, fee and result in a single parent view.">
+              <figcaption><span>Parent Portal</span><span class="badge">Live</span></figcaption>
+            </figure>
+            <figure class="screen rv">
+              <img src="case-study/assets/teacher-portal.jpg" alt="Today's classes, attendance and marks for the teacher who teaches them.">
+              <figcaption><span>Teacher Portal</span><span class="badge">Live</span></figcaption>
+            </figure>
+          </div>
+          <button class="slider-btn prev" aria-label="Previous screens">‹</button>
+          <button class="slider-btn next" aria-label="Next screens">›</button>
         </div>
-
-        <p style="margin-top:18px;font-size:13px;color:var(--fg-3);font-family:var(--mono);">Placeholder frames for now. Final captures live in /case-study/screenshots/ and replace these without a layout change.</p>
       </div>
     </div>
   </section>
@@ -623,6 +643,25 @@
   if (sections.length) {
     window.addEventListener('scroll', updateActiveToc, { passive: true });
     updateActiveToc();
+  }
+
+  /* screens slider */
+  var screensWrap = document.querySelector('.screens-wrap');
+  if (screensWrap) {
+    var slider = screensWrap.querySelector('.screens');
+    var prev = screensWrap.querySelector('.slider-btn.prev');
+    var next = screensWrap.querySelector('.slider-btn.next');
+    var step = () => {
+      var first = slider.querySelector('.screen');
+      if (!first) return 280;
+      return first.getBoundingClientRect().width + 18;
+    };
+    var scrollByStep = (dir) => {
+      if (!slider) return;
+      slider.scrollBy({ left: dir * step(), behavior: 'smooth' });
+    };
+    if (prev) prev.addEventListener('click', function () { scrollByStep(-1); });
+    if (next) next.addEventListener('click', function () { scrollByStep(1); });
   }
 })();
 </script>
