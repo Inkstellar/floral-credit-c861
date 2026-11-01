@@ -248,6 +248,17 @@
   .slider-btn.prev{left:8px}
   .slider-btn.next{right:8px}
 
+  /* vertical screens */
+  .screens-vertical{
+    display:grid;
+    gap:18px;
+    margin-top:28px;
+  }
+  .screens-vertical .screen{
+    flex:none;
+    width:100%;
+  }
+
   /* final cta */
   .final-cta{
     background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
@@ -520,7 +531,7 @@
       </div>
 
       <div class="screens-wrap">
-        <div class="screens">
+        <div class="screens screens-vertical">
           <figure class="screen rv">
             <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;aspect-ratio:16/9;background:var(--bg-2);">
               <rect width="640" height="360" fill="var(--bg-2)"/>
@@ -687,8 +698,6 @@
             <figcaption><span>Flowchart</span><span class="badge">User Flow</span></figcaption>
           </figure>
         </div>
-        <button class="slider-btn prev" aria-label="Previous screens">‹</button>
-        <button class="slider-btn next" aria-label="Next screens">›</button>
       </div>
     </div>
   </section>
