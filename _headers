@@ -1,0 +1,42 @@
+# Cloudflare Pages headers for portfolio.inkstellar.com
+#
+# ⚠️ READ BEFORE EDITING
+# Cloudflare JOINS headers with a comma when the same header name is set by two
+# matching rules. From the docs:
+#
+#   "An incoming request which matches multiple rules' URL patterns will inherit
+#    all rules' headers."
+#
+#   "If a header is applied twice in the _headers file, the values are joined
+#    with a comma separator."
+#
+# A rule for /* ALSO matches /assets/*, so Cache-Control must be defined in
+# exactly ONE matching rule per path. Defining it in both produces the malformed:
+#   Cache-Control: public, max-age=0, must-revalidate, public, max-age=86400, ...
+# which makes browser caching behaviour undefined.
+#
+# Rule of thumb: never repeat a header name across overlapping patterns.
+# To remove a header set by a broader rule, prefix the name with "! " (e.g. "! Cache-Control").
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; object-src 'none'; upgrade-insecure-requests
+
+# Root — explicit rather than relying on Cloudflare's default for HTML.
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+# HTML — always revalidate, so a new deploy is picked up on the next visit.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Images and SVGs — 1 day, deliberately short.
+# While you are still swapping in real case-study images, a long immutable cache
+# would leave returning visitors stuck on the old file. Once the content is final,
+# change this to:  public, max-age=31536000, immutable
+/assets/*
+  Cache-Control: public, max-age=86400, must-revalidate
