@@ -355,6 +355,11 @@
   .behance-btn{width:clamp(72px,9vw,100px);height:clamp(72px,9vw,100px);border-radius:50%;background:var(--accent);color:#0A0A0A;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.4s var(--ease)}
   .behance-btn.swiper-button-disabled{background:transparent;border:2px solid var(--line-2);color:var(--fg-3);cursor:not-allowed}
   .behance-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+  /* ---------- featured project card ---------- */
+  .featured-card{grid-column:1 / -1;display:grid;grid-template-columns:1.2fr 1fr;gap:0}
+  .featured-card .shot{border-bottom:0;border-right:1px solid var(--line)}
+  @media (max-width:880px){.featured-card{grid-template-columns:1fr}.featured-card .shot{border-right:0;border-bottom:1px solid var(--line)}}
   @media (max-width:880px){.behance-slide{display:flex;flex-direction:column;align-items:stretch;justify-content:center}.behance-descr{order:-1;padding:16px var(--pad) 0}.behance-cover{width:100%;max-width:none;margin:clamp(14px,3vw,20px) 0 0}}
   @media (max-width:620px){.behance-cover{aspect-ratio:808/632;margin-top:clamp(14px,3vw,20px)}}
   @media (prefers-reduced-motion:reduce){.behance-cover,.behance-descr,.behance-cover img{transition:none!important}}
@@ -630,10 +635,10 @@
       <h2 class="sec-title rv">AI that lives at your cursor.</h2>
       
       <div class="work-grid" style="margin-top:clamp(34px,4.4vw,56px)">
-        <article class="card rv" style="grid-column: 1 / -1; display: grid; grid-template-columns: 1.2fr 1fr; gap: 0;">
-          <figure class="shot" style="border-bottom: 0; border-right: 1px solid var(--line);">
+        <article class="card rv featured-card">
+          <figure class="shot">
             <img src="assets/featured-project.png" alt="High-fidelity landing page showcase for InkBuddy, featuring the cursor-based HUD and neon-dark aesthetic.">
-            <figcaption style="border-top: 1px solid var(--line);">
+            <figcaption>
               <span>Native macOS Assistant</span>
               <span class="badge">Live</span>
             </figcaption>
